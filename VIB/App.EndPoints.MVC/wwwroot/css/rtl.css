@@ -1,0 +1,12 @@
+﻿body {
+    direction: rtl;
+    text-align: right;
+}
+
+.navbar {
+    direction: rtl;
+}
+
+.container {
+    direction: rtl;
+}

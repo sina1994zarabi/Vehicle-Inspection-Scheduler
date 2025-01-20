@@ -1,0 +1,70 @@
+﻿@model List<App.Domain.Core.Entities.Inspection.Appointment>
+@using FrameWork
+
+@{
+    ViewData["Title"] = "View Appointments";
+}
+
+<h2>نوبت های رزرو شده</h2>
+<table class = "styled-table">
+    <thead>
+        <tr>
+            <th>خودرو</th>
+            <th>مرکز</th>
+            <th>زمان</th>
+            <th>تاریخ</th>
+            <th>وضعیت</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var appointment in Model)
+        {
+                    <tr>
+                        <td>@appointment.Car.Model</td>
+                        <td>@appointment.Center.Name</td>
+                        <td>@appointment.TimeOfDaySlot.Time</td>
+                        <td>@appointment.TimeOfDaySlot.Day.Date.ToPersianString()</td>
+                        <td>@appointment.Status.</td>
+                            <td>
+                            <form asp-action="Confirm" asp-route-id="@appointment.Id" method="post" style="display:inline;">
+                                <button type="submit" class="btn btn-danger" style="border: none; background-color: blue; color: white; padding: 5px 10px; cursor: pointer;">
+                                    تایید
+                                </button>
+                            </form>
+                              <form asp-action="Reject" asp-route-id="@appointment.Id" method="post" style="display:inline;">
+                                 <button type="submit" class="btn btn-danger" style="border: none; background-color: red; color: white; padding: 5px 10px; cursor: pointer;">
+                                    رد
+                                 </button>
+                              </form>
+                        </td>
+                    </tr>
+        }
+    </tbody>
+</table>
+
+<style>
+    .styled-table {
+    border: 1px solid black;
+    border-collapse: collapse;
+    width: 100%;
+    font-family: Arial, sans-serif;
+    margin-top: 20px;
+}
+
+.styled-table th,
+.styled-table td {
+    border: 1px solid black;
+    padding: 10px;
+    text-align: left;
+}
+
+.styled-table th {
+    background-color: #f2f2f2; 
+    font-weight: bold;
+}
+
+.styled-table tr:nth-child(even) {
+    background-color: #f9f9f9; 
+}
+
+</style>

@@ -1,0 +1,110 @@
+﻿@model App.Domain.Core.Entities.Users.User;
+
+
+
+<div class="container">
+    <h2>ورود</h2>
+    <form asp-action="Login" method="post">
+        <div class="form-group">
+            <label for="phoneNumber">شماره تلفن:</label>
+            <input type="text" id="phoneNumber" name="PhoneNumber" asp-for="PhoneNumber" class="form-control" placeholder="9xxxxxxxxx" required>
+            <span class="input-icon"><i class="fa fa-mobile"></i></span>
+        </div>
+        <button type="submit" class="btn btn-primary">دریافت کد تایید</button>
+    </form>
+    <div class="alternative-login">
+        <a href = "@Url.Action("LoginWithUsername", "User")" class="btn btn-link">ورود با نام‌کاربری</a>
+    </div>
+    <div class="register">
+        <a href="@Url.Action("Register", "User")" class="btn btn-success">ثبت نــام</a>
+    </div>
+</div>
+
+
+<style>
+
+
+.container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: right;
+    width: 50%;
+}
+
+h2 {
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    position: relative;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+.input-icon {
+    position: absolute;
+    right: 10px;
+    top: 35px;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.alternative-login,
+.register
+{
+    margin-top: 10px;
+}
+
+.btn-link {
+    display: block;
+    margin-top: 5px;
+    color: #007bff;
+    text-decoration: none;
+}
+
+.btn-link:hover {
+    text-decoration: underline;
+}
+
+.btn-success {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    margin-top: 10px;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+}
+
+</style>

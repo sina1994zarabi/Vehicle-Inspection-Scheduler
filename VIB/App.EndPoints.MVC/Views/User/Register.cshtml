@@ -1,0 +1,114 @@
+﻿@model App.Domain.Core.Entities.Users.User;
+
+<div class="container">
+    <h2>ثبت‌نام</h2>
+    <form asp-action="ConfirmRegisteration" method="post">
+        <div class="form-group">
+            <label for="nationalId">کد ملی:</label>
+            <input type="text" id="nationalId" name="NationalId" asp-for="IdentificationNumber" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="birthDay">روز تولد:</label>
+            <select id="birthDay" name="BirthDay" asp-for="DateOfBirth.Day" class="form-control" required>
+                @for (int i = 1; i <= 31; i++)
+                {
+                        <option value="@i">@i</option>
+                }
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="birthMonth">ماه تولد:</label>
+            <select id="birthMonth" name="BirthMonth" asp-for="DateOfBirth.Month" class="form-control" required>
+                @for (int i = 1; i <= 12; i++)
+                {
+                        <option value="@i">@i</option>
+                }
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="birthYear">سال تولد:</label>
+            <select id="birthYear" name="BirthYear" asp-for="DateOfBirth.Year" class="form-control" required>
+                @for (int i = DateTime.Now.Year; i >= 1900; i--)
+                {
+                        <option value="@i">@i</option>
+                }
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="username">نام‌کاربری:</label>
+            <input type="text" id="username" name="Username" asp-for="Username" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="password">رمز عبور:</label>
+            <input type="password" id="password" name="Password" asp-for="Password" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="mobileNumber">شماره تلفن همراه:</label>
+            <input type="text" id="mobileNumber" name="MobileNumber" asp-for="PhoneNumber" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary">ثبت نام</button>
+        <a  class="btn btn-secondary" asp-action="Index">بازگشت</a>
+    </form>
+</div>
+
+
+<style>
+
+.container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: right;
+    width: 50%;
+}
+
+h2 {
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="password"],
+select {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-secondary {
+    width: 100%;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+</style>

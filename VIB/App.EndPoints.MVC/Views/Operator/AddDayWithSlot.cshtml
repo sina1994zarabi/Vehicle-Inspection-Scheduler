@@ -1,0 +1,35 @@
+﻿@model AddDayWithSlotViewModel
+@using FrameWork
+<div class="container">
+    <h2>Add Day with Time Slots</h2>
+    <form asp-action="AddDayWithSlots" method="post">
+        <div class="form-group">
+            <label for="centerId">Center:</label>
+            <select id="centerId" name="centerName" asp-for="CenterId" class="form-control" required>
+                @foreach (var center in Model.Centers)
+                {
+                        <option value="@center.Name">@center.Name</option>
+                }
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="day">Date:</label>
+              <select id="day" name="Date" asp-for = "DayId" class="form-control" required>
+                @foreach (var day in Model.Days)
+                {
+                    <option value="@day.Date">@day.Date.ToPersianString()</option>
+                }
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="timeSlots">Time Slots:</label>
+            <select id="timeSlots" name="timeSlot" asp-for = "TimeSlotId" class="form-control" required>
+                @foreach (var timeSlot in Model.TimeSlots)
+                {
+                        <option value="@timeSlot.Time">@timeSlot.Time</option>
+                }
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Day with Slots</button>
+    </form>
+</div>

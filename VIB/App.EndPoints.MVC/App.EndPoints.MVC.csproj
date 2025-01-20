@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\App.Domain.Core\App.Domain.Core.csproj" />
+    <ProjectReference Include="..\App.Domain.Service\App.Services.Service.csproj" />
+    <ProjectReference Include="..\App.FrameWork\FrameWork.csproj" />
+    <ProjectReference Include="..\App.Infra.Data.Db\App.Infra.Data.Db.csproj" />
+    <ProjectReference Include="..\App.Infra.Data.Ef\App.Infra.Data.Ef.csproj" />
+    <ProjectReference Include="..\App.Services.AppService\App.Services.AppService.csproj" />
+  </ItemGroup>
+
+</Project>

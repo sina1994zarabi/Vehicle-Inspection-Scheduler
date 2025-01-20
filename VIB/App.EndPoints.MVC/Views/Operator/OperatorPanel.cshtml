@@ -1,0 +1,93 @@
+﻿@model UserPanelViewModel
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="vertical-menu">
+                <a href="#" class="active">خانه</a>
+                <a href="#">مشاهده پروفایل</a>
+                <a href="#"> مشاهده خودرو های لاگ شده</a>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="panel-grid">
+                @foreach (var s in Model.Sections)
+                {
+                    <div class="panel-section">
+                        <h3>@s.Title</h3>
+                        <p>@s.Description</p>
+                        <a href = "@Url.Action($"{s.Link}", "Operator")" class="btn btn-primary">بیشتر </a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.container {
+    margin-top: 20px;
+}
+
+.vertical-menu {
+    width: 100%;
+    background-color: #f4f4f4;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.vertical-menu a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: #333;
+    border-bottom: 1px solid #ccc;
+}
+
+.vertical-menu a:hover {
+    background-color: #ddd;
+}
+
+.vertical-menu a.active {
+    background-color: #007bff;
+    color: white;
+}
+
+.panel-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.panel-section {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    width: calc(33.333% - 20px);
+    box-sizing: border-box;
+    text-align: right;
+}
+
+.panel-section h3 {
+    margin-top: 0;
+}
+
+.panel-section p {
+    margin-bottom: 10px;
+}
+
+.panel-section .btn {
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+}
+
+.panel-section .btn:hover {
+    background-color: #0056b3;
+}
+
+</style>
