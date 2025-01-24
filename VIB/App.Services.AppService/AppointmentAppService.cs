@@ -6,6 +6,7 @@ using App.Domain.Core.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,74 +15,117 @@ namespace App.Services.AppService
     public class AppointmentAppService : IAppointmentAppService
     {
 
-        private readonly ITimeOfDaySlotService _slotService;
-        private readonly IDayService _dayService;
-        private readonly ICenterService _centerService;
+        private readonly IAppointmentService _appontmentService;
         private readonly ICarService _carService;
-        private readonly IAppointmentService _appointmentService;
+        private readonly IRejectedCarService _rejectedCarService;
+        private readonly string _saipaCap;
+        private readonly string _iranKhodroCap;
 
 
-        public AppointmentAppService(ITimeOfDaySlotService slotService,
-            IDayService dayService,
-            ICenterService centerService,
-            ICarService carService,
-            IAppointmentService appointmentService )
+        public AppointmentAppService(IAppointmentService appointmentService, ICarService carService,
+            string SaipaCap, string IranKhodroCap, IRejectedCarService rejectedCarService)
         {
-            _slotService = slotService;
-            _dayService = dayService;
-            _centerService = centerService;
+            _appontmentService = appointmentService;
             _carService = carService;
-            _appointmentService = appointmentService;
+            _saipaCap = SaipaCap;
+            _iranKhodroCap = IranKhodroCap;
+            _rejectedCarService = rejectedCarService;
+
         }
 
-        public void ChangeStatusTo(int id, StatusEnum newStatus)
+        
+
+
+        public void ChangeAppointmentInfo(Appointment appointment)
         {
-            _appointmentService.ChangeStatusTo(id, newStatus);
+            _appontmentService.ChangeAppointmentInfo(appointment.Id,appointment);
+        }
+
+        public void ConfirmAppointment(int id)
+        {
+            _appontmentService.ChangeStatusTo(id,StatusEnum.Confirmed);
         }
 
         public void DeleteAppointment(int id)
         {
-            _appointmentService.DeleteRecord(id);
+            _appontmentService.Delete(id);
         }
 
-        public List<Appointment> GetAllAppointments(int userId)
-		{
-			return _appointmentService.GetAll()
-                .Where(x => x.Car.UserId == userId).ToList();
-		}
-
-		public List<TimeOfDaySlot> GetAvailableSlots(int centerId, DateTime date)
+        public List<Appointment> GetAllAppointments()
         {
-            var day = _dayService.GetAllDays().FirstOrDefault(x => x.Date == date );
-            if (day == null)  return new List<TimeOfDaySlot>();
-            var center = day.Centers.FirstOrDefault(c => c.Id == centerId);
-            if (center == null) return new List<TimeOfDaySlot>();
-            return day.Slots.Where(x => !x.IsBooked).ToList();
+            return _appontmentService.GetAll();
         }
 
-        public List<Car> GetCarsByOwner(int ownerId)
+        public Appointment GetAppointmentById(int id)
         {
-            return _carService.GetAllVehicles().Where(x => x.User.Id == ownerId).ToList();
+            return  _appontmentService.GetById(id);
         }
 
-        public List<Center> GetCenters() 
+        public List<Appointment> GetAppointmentsByDate(DateTime date)
         {
-            return _centerService.GetAllCenters();
+            return _appontmentService.GetAll().Where(x => x.Date.Day == date.Day).ToList();
         }
 
-        public List<Day> GetDays()
+        public List<RejectedCar> GetRejectedCars()
         {
-            return _dayService.GetAllDays();
+            return _rejectedCarService.GetAllRejectedCars();
         }
 
-		public TimeOfDaySlot GetTimeById(int id)
-		{
-			return _slotService.GetTimeSlot(id);
-		}
-
-		public void ScheduleAppointment(Appointment appointment)
+        public void RejectAppointment(int id, string rejectionReason)
         {
-            _appointmentService.Register(appointment);
+           _appontmentService.ChangeStatusTo(id,StatusEnum.Rejected);
+        }
+
+
+        
+        public string ScheduleAppointment(Appointment appointment)
+        {
+            var car = _carService.GetVehicle(appointment.CarId);
+            if (car == null) return "Car Not Found";
+
+            var currentYear = DateTime.Now.Year;
+            if (currentYear - car.Year > 5)
+            {
+                _rejectedCarService.AddRejectedCar(new RejectedCar
+                {
+                    CarId = car.Id,
+                    RejectionReason = "عمر خودرو بیش از 5 سال است",
+                    RejectionDate = DateTime.Now
+                });
+                return "Car is older than 5 years and cannot be inspected.";
+            };
+
+            var dayOfWeek = appointment.Date.DayOfWeek;
+            int MaxRequest = 0;
+            MakeEnum carMake = MakeEnum.A;
+            if (dayOfWeek == DayOfWeek.Saturday || dayOfWeek == DayOfWeek.Monday || dayOfWeek == DayOfWeek.Wednesday)
+                MaxRequest = int.Parse(_iranKhodroCap);
+            if (dayOfWeek == DayOfWeek.Sunday || dayOfWeek == DayOfWeek.Thursday || dayOfWeek == DayOfWeek.Tuesday)
+            {
+                MaxRequest = int.Parse(_saipaCap);
+                carMake = MakeEnum.B;
+            }
+            
+            if (car.Make != carMake)
+                return "خودرو شما مجاز به اخذ نوبت در این روز نیست";
+
+            var existingAppointments = _appontmentService
+            .GetAll()
+            .Where(x => x.Date.Date == appointment.Date.Date)
+            .Count();
+
+            if (existingAppointments >= MaxRequest)
+                return "ظرفیت در این روز تکمیل است.";
+
+            var lastInspection = _appontmentService
+           .GetAll()
+           .FirstOrDefault(x => x.CarId == car.Id && x.Date.Year == DateTime.Now.Year);
+            if (lastInspection != null)
+                return "امکان معایته مجدد در یک سال وجود ندارد.";
+
+            _appontmentService.CreateAppointment(appointment);
+            return "نوبت معاینه فنی با موفقیت ثبت شد";
+
         }
     }
 }

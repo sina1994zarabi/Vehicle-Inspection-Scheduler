@@ -1,0 +1,33 @@
+﻿@model App.Domain.Core.Entities.Inspection.Appointment
+@using FrameWork
+@using App.Domain.Core.Enums;
+
+<h2>لغو نوبت</h2>
+
+<div>
+    <h4>آیا مطمئن هستید که می‌خواهید این نوبت را لغو کنید؟</h4>
+    <dl class="row">
+        <dt class="col-sm-2">خودرو</dt>
+        <dd class="col-sm-10">@Model.Car.Model</dd>
+        <dt class="col-sm-2">تاریخ</dt>
+        <dd class="col-sm-10">@Model.Date.ToPersianString()</dd>
+        <dt class="col-sm-2">وضعیت</dt>
+        <dd class="col-sm-10">
+            @{
+                string statusText = Model.Status switch
+                {
+                    StatusEnum.Pending => "در انتظار تایید",
+                    StatusEnum.Confirmed => "تایید شده",
+                    StatusEnum.Rejected => "رد شده",
+                    _ => "نامشخص"
+                };
+            }
+            @statusText
+        </dd>
+    </dl>
+    <form asp-action="DeleteConfirmed" method = "Post">
+        <input type="hidden" name="Id" value="@Model.Id" />
+        <button type="submit" class="btn btn-danger">لغو</button>
+        <a href="@Url.Action("Index")" class="btn btn-secondary">بازگشت</a>
+    </form>
+</div>

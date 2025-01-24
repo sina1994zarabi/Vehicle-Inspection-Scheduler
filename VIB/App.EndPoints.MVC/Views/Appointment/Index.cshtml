@@ -1,0 +1,77 @@
+﻿@model List<App.Domain.Core.Entities.Inspection.Appointment>
+@using FrameWork;
+@using App.Domain.Core.Enums;
+
+<h2>نوبت های رزور شده</h2>
+<table>
+    <thead>
+        <tr>
+            <th>خودرو</th>
+            <th>تاریخ</th>
+            <th>زمان</th>
+            <th>وضعیت</th>
+            <th>عملیات</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var appointment in Model)
+        {
+                <tr>
+                    <td>@appointment.Car.Model</td>
+                    <td>@appointment.Date.ToPersianString()</td>
+                    <td>@appointment.Date.TimeOfDay</td>
+                        <td> @{
+                        string statusText = appointment.Status switch 
+                                            { StatusEnum.Pending => "در انتظار تایید",
+                                              StatusEnum.Confirmed => "تایید شده",
+                                              StatusEnum.Rejected => "رد شده",
+                                              };
+                              }@statusText</td>
+                    <td>
+                        <a href="/Appointment/Details/@appointment.Id">جزییات بیشتر</a> |
+                        <a href="/Appointment/Edit/@appointment.Id">ویرایش</a> |
+                        <a href="/Appointment/Delete/@appointment.Id">لغو</a>
+                    </td>
+                </tr>
+        }
+    </tbody>
+</table>
+
+<style>
+    h2 {
+        text-align: center;
+        font-family: 'Arial', sans-serif;
+        color: #333;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        font-size: 18px;
+        text-align: left;
+    }
+
+    th, td {
+        padding: 12px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    th {
+        background-color: #f2f2f2;
+        color: #333;
+    }
+
+    tr:hover {
+        background-color: #f5f5f5;
+    }
+
+    a {
+        color: #3498db;
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+</style>

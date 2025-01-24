@@ -24,7 +24,8 @@ namespace App.Domain.Core.Entities.Users
         [Display(Name = "نام خانوادگی")]
         public string LastName { get; set; }
 
-
+        [Required(ErrorMessage = "ورود نام کاربری ضروری است.")]
+        [StringLength(20, MinimumLength = 3, ErrorMessage = "نام کاربری باید حداقل بین 3 تا 20 کاراکتر باشد.")]
         public string Username { get; set; }
 
         [Required]
@@ -60,10 +61,7 @@ namespace App.Domain.Core.Entities.Users
         #endregion
 
         #region NavigationProperties
-
         public List<Car> cars { get; set; }
-
-
         #endregion
     }
 }

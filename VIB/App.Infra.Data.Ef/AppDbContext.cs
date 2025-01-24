@@ -16,12 +16,11 @@ namespace App.Infra.Data.Ef
 
 
         public DbSet<User> Users { get; set; }
-        public DbSet<Car> Vehicles { get; set; }
+        public DbSet<Car> Cars { get; set; }
         public DbSet<Operator> Operators { get; set; }
         public DbSet<Center> Centers { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
-        public DbSet<Day> Days { get; set; }
-        public DbSet<TimeOfDaySlot> Slots { get; set; }
+        public DbSet<RejectedCar> RejectedCars { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
@@ -34,8 +33,6 @@ namespace App.Infra.Data.Ef
             modelBuilder.ApplyConfiguration(new OperatorConfiguration());
             modelBuilder.ApplyConfiguration(new CarConfiguration());
             modelBuilder.ApplyConfiguration(new CenterConfiguration());
-            modelBuilder.ApplyConfiguration(new DayConfiguration());
-            modelBuilder.ApplyConfiguration(new TimeOfDaySlotConfiguration());
         }
     }
 }

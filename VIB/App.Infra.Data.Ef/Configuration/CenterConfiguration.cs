@@ -14,8 +14,8 @@ namespace App.Infra.Data.Ef.Configuration
         public void Configure(EntityTypeBuilder<Center> builder)
         {
             builder.HasData(new List<Center>() {
-                new Center { Id = 1, Name = "مرکز 1" , Address = "آدرس مرکز یک" , ContactNumber = "xxxxxxxxx",DayId = 1},
-                new Center { Id = 2, Name = "مرکز 2" , Address = "آدرس مرکز دو" , ContactNumber = "xxxxxxxxx",DayId = 2}
+                new Center { Id = 1, Name = "مرکز 1" , Address = "آدرس مرکز یک" , ContactNumber = "xxxxxxxxx"},
+                new Center { Id = 2, Name = "مرکز 2" , Address = "آدرس مرکز دو" , ContactNumber = "xxxxxxxxx"}
             });
         }
     }

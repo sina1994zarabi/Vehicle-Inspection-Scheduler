@@ -1,5 +1,4 @@
-﻿using App.Domain.Core.Entities.Base.Entity;
-using App.Domain.Core.Entities.Inspection;
+﻿using App.Domain.Core.Entities.Inspection;
 using App.Domain.Core.Enums;
 using System;
 using System.Collections.Generic;
@@ -9,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace App.Domain.Core.Contracts.Repository
 {
-    public interface IAppointmentRepository
+    public interface IAppointmentRepository 
     {
         void Add(Appointment appointment);
-        Appointment Get(int id);
         List<Appointment> GetAll();
-        void Update(int id, Appointment appointment);
-        void ChangeStatusTo(int id, StatusEnum newStatus);
-        Result Delete(int id);
+        Appointment GetById(int id);
+        void Update(int id,Appointment appointment);
+        string ChangeStatusTo(int id, StatusEnum status);
+        string Delete(int id);
     }
 }

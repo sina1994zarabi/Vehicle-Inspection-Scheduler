@@ -13,12 +13,10 @@ namespace App.Domain.Core.Entities.Inspection
         public string Name { get; set; }
         public string Address { get; set; }
         public string ContactNumber { get; set; }
-        public int DayId { get; set; }
         #endregion
 
         #region navigation properties
-        List<Appointment> appoinments { get; set; }
-        public Day Day { get; set; }
+        List<Appointment> Appoinments { get; set; }
         #endregion
     }
 }

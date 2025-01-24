@@ -22,6 +22,7 @@ namespace App.Infra.Data.Ef.Repositories
         public void Add(Center center)
         {
             _context.Centers.Add(center);
+            _context.SaveChanges();
         }
 
         public Result Delete(int id)
@@ -44,11 +45,6 @@ namespace App.Infra.Data.Ef.Repositories
         public List<Center> GetAll()
         {
             return _context.Centers.ToList();
-        }
-
-        public Center GetByName(string name)
-        {
-            return _context.Centers.FirstOrDefault(x => x.Name == name);
         }
 
         public void Update(int id, Center center)

@@ -5,6 +5,7 @@ using App.Domain.Service;
 using App.Infra.Data.Ef;
 using App.Infra.Data.Ef.Repositories;
 using App.Services.AppService;
+using App.Services.Service;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,27 +18,25 @@ builder.Services.AddSingleton(IranKhodroCap);
 // Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+
+
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserAppService, UserAppService>();
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 builder.Services.AddScoped<IAppointmentService, AppointmentService>();
+builder.Services.AddScoped<IAppointmentAppService, AppointmentAppService>();
 builder.Services.AddScoped<ICarRepository, CarRepository>();
 builder.Services.AddScoped<ICarService, CarService>();
+builder.Services.AddScoped<IVehicleAppService, VehicleAppService>();
 builder.Services.AddScoped<ICenterRepository, CenterRepository>();
 builder.Services.AddScoped<ICenterService, CenterService>();
-builder.Services.AddScoped<IDayRepository, DayRepository>();
-builder.Services.AddScoped<IDayService, DayService>();
 builder.Services.AddScoped<IOperatorRepository, OperatorRepository>();
 builder.Services.AddScoped<IOperatorService, OperatorService>();
-builder.Services.AddScoped<ITimeOfDaySlotRepository, TimeOfDaySlotRepository>();
-builder.Services.AddScoped<ITimeOfDaySlotService, TimeOfDaySlotService>();
-builder.Services.AddScoped<IUserAppService, UserAppService>();
-builder.Services.AddScoped<IAppointmentAppService, AppointmentAppService>();
 builder.Services.AddScoped<IOperatorAppService, OperatorAppService>();
-builder.Services.AddScoped<IVehicleAppService, VehicleAppService>();
-builder.Services.AddScoped<ICenterAppService, CenterAppService>();
-builder.Services.AddScoped<IDayAppService, DayAppService>();
-builder.Services.AddScoped<ITimeSlotAppService, TimeSlotAppService>();
+builder.Services.AddScoped<IRejectedCarRepository, RejectedCarRepository>();
+builder.Services.AddScoped<IRejectedCarService, RejectedCarService>();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();

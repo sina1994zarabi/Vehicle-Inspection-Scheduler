@@ -36,10 +36,10 @@ namespace App.Infra.Data.Ef.Migrations
                     b.Property<int>("CenterId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
 
-                    b.Property<int>("TimeOfDaySlotId")
+                    b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -47,8 +47,6 @@ namespace App.Infra.Data.Ef.Migrations
                     b.HasIndex("CarId");
 
                     b.HasIndex("CenterId");
-
-                    b.HasIndex("TimeOfDaySlotId");
 
                     b.ToTable("Appointments");
                 });
@@ -69,16 +67,11 @@ namespace App.Infra.Data.Ef.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("DayId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DayId");
 
                     b.ToTable("Centers");
 
@@ -88,7 +81,6 @@ namespace App.Infra.Data.Ef.Migrations
                             Id = 1,
                             Address = "آدرس مرکز یک",
                             ContactNumber = "xxxxxxxxx",
-                            DayId = 1,
                             Name = "مرکز 1"
                         },
                         new
@@ -96,95 +88,7 @@ namespace App.Infra.Data.Ef.Migrations
                             Id = 2,
                             Address = "آدرس مرکز دو",
                             ContactNumber = "xxxxxxxxx",
-                            DayId = 2,
                             Name = "مرکز 2"
-                        });
-                });
-
-            modelBuilder.Entity("App.Domain.Core.Entities.Inspection.Day", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("TimeSlotsPerDay")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Days");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Date = new DateTime(2025, 1, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            TimeSlotsPerDay = 10
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Date = new DateTime(2025, 2, 18, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            TimeSlotsPerDay = 10
-                        });
-                });
-
-            modelBuilder.Entity("App.Domain.Core.Entities.Inspection.TimeOfDaySlot", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("DayId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsBooked")
-                        .HasColumnType("bit");
-
-                    b.Property<TimeSpan>("Time")
-                        .HasColumnType("time");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DayId");
-
-                    b.ToTable("Slots");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            DayId = 1,
-                            IsBooked = false,
-                            Time = new TimeSpan(0, 9, 0, 0, 0)
-                        },
-                        new
-                        {
-                            Id = 2,
-                            DayId = 1,
-                            IsBooked = false,
-                            Time = new TimeSpan(0, 10, 0, 0, 0)
-                        },
-                        new
-                        {
-                            Id = 3,
-                            DayId = 2,
-                            IsBooked = false,
-                            Time = new TimeSpan(0, 9, 0, 0, 0)
-                        },
-                        new
-                        {
-                            Id = 4,
-                            DayId = 2,
-                            IsBooked = false,
-                            Time = new TimeSpan(0, 10, 0, 0, 0)
                         });
                 });
 
@@ -270,7 +174,7 @@ namespace App.Infra.Data.Ef.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 1, 19, 13, 13, 58, 228, DateTimeKind.Local).AddTicks(5763),
+                            CreatedAt = new DateTime(2025, 1, 20, 18, 19, 19, 460, DateTimeKind.Local).AddTicks(9745),
                             DateOfBirth = new DateTime(1994, 8, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FirstName = "سینا",
                             Gender = 1,
@@ -289,6 +193,9 @@ namespace App.Infra.Data.Ef.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("LastInspectionDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("LicensePlate")
                         .IsRequired()
@@ -313,7 +220,7 @@ namespace App.Infra.Data.Ef.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Vehicles");
+                    b.ToTable("Cars");
 
                     b.HasData(
                         new
@@ -325,6 +232,32 @@ namespace App.Infra.Data.Ef.Migrations
                             UserId = 1,
                             Year = 2021
                         });
+                });
+
+            modelBuilder.Entity("App.Domain.Core.Entities.Vehicle.RejectedCar", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CarId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("RejectionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("RejectionReason")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CarId");
+
+                    b.ToTable("RejectedCars");
                 });
 
             modelBuilder.Entity("App.Domain.Core.Entities.Inspection.Appointment", b =>
@@ -341,39 +274,9 @@ namespace App.Infra.Data.Ef.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("App.Domain.Core.Entities.Inspection.TimeOfDaySlot", "TimeOfDaySlot")
-                        .WithMany()
-                        .HasForeignKey("TimeOfDaySlotId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Car");
 
                     b.Navigation("Center");
-
-                    b.Navigation("TimeOfDaySlot");
-                });
-
-            modelBuilder.Entity("App.Domain.Core.Entities.Inspection.Center", b =>
-                {
-                    b.HasOne("App.Domain.Core.Entities.Inspection.Day", "Day")
-                        .WithMany("Centers")
-                        .HasForeignKey("DayId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Day");
-                });
-
-            modelBuilder.Entity("App.Domain.Core.Entities.Inspection.TimeOfDaySlot", b =>
-                {
-                    b.HasOne("App.Domain.Core.Entities.Inspection.Day", "Day")
-                        .WithMany("Slots")
-                        .HasForeignKey("DayId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Day");
                 });
 
             modelBuilder.Entity("App.Domain.Core.Entities.Vehicle.Car", b =>
@@ -387,11 +290,15 @@ namespace App.Infra.Data.Ef.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("App.Domain.Core.Entities.Inspection.Day", b =>
+            modelBuilder.Entity("App.Domain.Core.Entities.Vehicle.RejectedCar", b =>
                 {
-                    b.Navigation("Centers");
+                    b.HasOne("App.Domain.Core.Entities.Vehicle.Car", "Car")
+                        .WithMany()
+                        .HasForeignKey("CarId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Slots");
+                    b.Navigation("Car");
                 });
 
             modelBuilder.Entity("App.Domain.Core.Entities.Users.User", b =>

@@ -5,6 +5,7 @@ using App.Domain.Core.Entities.Users;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -22,16 +23,16 @@ namespace App.Services.AppService
 
         public Result LoginWithPhoneNumber(string phoneNumber)
         {
-            var UserToLogIn = _userService.GetUserByPhoneNumber(phoneNumber);
+            var UserToLogIn = _userService.GetAllUsers().FirstOrDefault(x => x.PhoneNumber == phoneNumber);
             if (UserToLogIn != null) return new Result(true,"LoggedIn Successfully", UserToLogIn);
-            return new Result(false, "User Not Found");
+            return new Result(false, "کاربری با شماره تلفن وارد شده یافت نشد.");
         }
 
         public Result LoginWithUserName(string userName,string password)
         {
-            var UserToLogIn = _userService.GetUserByUserName(userName,password);
+            var UserToLogIn = _userService.GetAllUsers().FirstOrDefault(x => x.Username == userName);
             if (UserToLogIn != null) return new Result(true, "LoggedInSuccessfully", UserToLogIn);
-            return new Result(false, "User Not Found");
+            return new Result(false, "نام کاربری یا رمز عبور اشتباه است.");
         }
 
         public Result Register(User user)
@@ -42,7 +43,6 @@ namespace App.Services.AppService
             return new Result(true, "Successfull registration");
         }
 
-        // shedule an appointment
         
     }
 }

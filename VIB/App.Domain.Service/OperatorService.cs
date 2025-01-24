@@ -33,11 +33,6 @@ namespace App.Domain.Service
             return _operatorRepository.GetById(id);
         }
 
-        public Operator GetOperatorByUserName(string username)
-        {
-            return _operatorRepository.GetByName(username);
-        }
-
         public List<Operator> GetOperators()
         {
             return _operatorRepository.GetAll();

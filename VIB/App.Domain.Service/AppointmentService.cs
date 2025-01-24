@@ -1,6 +1,6 @@
-﻿using App.Domain.Core.Contracts.Repository;
+﻿using App.Domain.Core.Contracts.AppService;
+using App.Domain.Core.Contracts.Repository;
 using App.Domain.Core.Contracts.Service;
-using App.Domain.Core.Entities.Base.Entity;
 using App.Domain.Core.Entities.Inspection;
 using App.Domain.Core.Enums;
 using System;
@@ -9,46 +9,45 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace App.Domain.Service
+namespace App.Services.Service
 {
     public class AppointmentService : IAppointmentService
     {
-
-        private readonly IAppointmentRepository _appiontmentRepository;
+        private readonly IAppointmentRepository _appointmentRepository;
 
         public AppointmentService(IAppointmentRepository appointmentRepository)
         {
-            _appiontmentRepository = appointmentRepository;
+            _appointmentRepository = appointmentRepository;
         }
 
-        public void ChangeInfo(int id, Appointment appointment)
+        public void ChangeAppointmentInfo(int id,Appointment appointment)
         {
-            _appiontmentRepository.Update(id, appointment);
+            _appointmentRepository.Update(id,appointment);
         }
 
-        public void ChangeStatusTo(int id, StatusEnum newStatus)
+        public string ChangeStatusTo(int id, StatusEnum status)
         {
-            _appiontmentRepository.ChangeStatusTo(id, newStatus);
+            return _appointmentRepository.ChangeStatusTo(id,status);
         }
 
-        public Result DeleteRecord(int id)
+        public void CreateAppointment(Appointment appointment)
         {
-            return _appiontmentRepository.Delete(id);
+            _appointmentRepository.Add(appointment);
+        }
+
+        public string Delete(int id)
+        {
+            return _appointmentRepository.Delete(id);
         }
 
         public List<Appointment> GetAll()
         {
-            return _appiontmentRepository.GetAll();
+            return _appointmentRepository.GetAll();
         }
 
         public Appointment GetById(int id)
         {
-            return _appiontmentRepository.Get(id);
-        }
-
-        public void Register(Appointment appointment)
-        {
-            _appiontmentRepository.Add(appointment);
+            return _appointmentRepository.GetById(id);
         }
     }
 }

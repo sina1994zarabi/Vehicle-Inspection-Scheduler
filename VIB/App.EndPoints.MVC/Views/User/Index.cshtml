@@ -1,16 +1,20 @@
 ﻿@model App.Domain.Core.Entities.Users.User;
 
-
-
 <div class="container">
     <h2>ورود</h2>
-    <form asp-action="Login" method="post">
+    @if (TempData["Message"] != null)
+    {
+            <div class="alert alert-danger">
+            @TempData["Message"]
+            </div>
+    }
+    <form asp-action="LoginWithPhoneNumber" method="post">
         <div class="form-group">
             <label for="phoneNumber">شماره تلفن:</label>
             <input type="text" id="phoneNumber" name="PhoneNumber" asp-for="PhoneNumber" class="form-control" placeholder="9xxxxxxxxx" required>
-            <span class="input-icon"><i class="fa fa-mobile"></i></span>
+            <span asp-validation-for="PhoneNumber" class= "text-danger"></span>
         </div>
-        <button type="submit" class="btn btn-primary">دریافت کد تایید</button>
+        <button type="submit" class="btn btn-primary">ورود</button>
     </form>
     <div class="alternative-login">
         <a href = "@Url.Action("LoginWithUsername", "User")" class="btn btn-link">ورود با نام‌کاربری</a>
@@ -108,3 +112,7 @@ button:hover {
 }
 
 </style>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>

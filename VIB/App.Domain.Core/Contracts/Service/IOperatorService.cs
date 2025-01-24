@@ -12,7 +12,6 @@ namespace App.Domain.Core.Contracts.Service
     {
         void Register(Operator @operator);
         Operator GetOperatorById (int id);
-        Operator GetOperatorByUserName (string username);
         List<Operator> GetOperators();
         Result DeleteRecord(int id);
         void ChangeInfo(int id, Operator @operator);   

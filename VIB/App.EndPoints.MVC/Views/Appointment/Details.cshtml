@@ -1,0 +1,28 @@
+﻿@model App.Domain.Core.Entities.Inspection.Appointment
+@using FrameWork
+@using App.Domain.Core.Enums
+<h2>جزییات نوبت</h2>
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">خودرو</dt>
+        <dd class="col-sm-10">@Model.Car.Model</dd>
+        <dt class="col-sm-2">تاریخ</dt>
+        <dd class="col-sm-10">@Model.Date.ToPersianString()</dd>
+        <dt class="col-sm-2">وضعیت</dt>
+        <dd class="col-sm-10">
+            @{
+                string statusText = Model.Status switch
+                {
+                    StatusEnum.Pending => "در انتظار تایید",
+                    StatusEnum.Confirmed => "تایید شده",
+                    StatusEnum.Rejected => "رد شده"
+                };
+            }
+            @statusText
+        </dd>
+    </dl>
+    <a href="@Url.Action("Edit", new { id = Model.Id })" class="btn btn-primary">ویرایش</a>
+    <a href="@Url.Action("Delete", new { id = Model.Id })" class="btn btn-danger">لغو</a>
+    <a href="@Url.Action("Index")" class="btn btn-secondary">بازگشت</a>
+</div>

@@ -10,7 +10,7 @@ namespace App.Domain.Core.Contracts.Repository
 {
     public interface ICarRepository
     {
-        void Add(Car vehicle);
+        void Add(Car car);
         Car Get(int id);
         List<Car> GetAll();
         void Update(int id,Car car);

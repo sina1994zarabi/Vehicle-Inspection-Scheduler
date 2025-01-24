@@ -22,10 +22,10 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">ورود</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">ورود | ثبت نام</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Register">ثبت نام</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Appointment" asp-action="ScheduleAppointment">درخواست معاینه فنی</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Operator" asp-action="Index">ورود ادمین</a>
@@ -39,6 +39,7 @@
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
+
         </main>
     </div>
 
@@ -47,6 +48,7 @@
             &copy; 2025 - App.EndPoints.MVC - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

@@ -22,13 +22,13 @@ namespace App.Infra.Data.Ef.Repositories
 
         public void Add(Car car)
         {
-            _context.Add(car);
+            _context.Cars.Add(car);
             _context.SaveChanges();
         }
 
         public Result Delete(int id)
         {
-            var vehicleToDelete = _context.Vehicles.FirstOrDefault(x => x.Id == id);
+            var vehicleToDelete = _context.Cars.FirstOrDefault(x => x.Id == id);
             if (vehicleToDelete != null)
             {
                 _context.Remove(vehicleToDelete);
@@ -40,19 +40,19 @@ namespace App.Infra.Data.Ef.Repositories
 
         public Car Get(int id)
         {
-            return _context.Vehicles.FirstOrDefault(x => x.Id == id);
+            return _context.Cars.FirstOrDefault(x => x.Id == id);
         }
 
         public List<Car> GetAll()
         {
-            return _context.Vehicles.
+            return _context.Cars.
                 Include(x => x.User).
                 ToList();
         }
 
         public void Update(int id,Car car)
         {
-            var vehicleToUpdate = _context.Vehicles.FirstOrDefault(x => x.Id == id);
+            var vehicleToUpdate = _context.Cars.FirstOrDefault(x => x.Id == id);
             vehicleToUpdate.UserId = car.UserId;
             vehicleToUpdate.LicensePlate = car.LicensePlate;
             vehicleToUpdate.Year = car.Year;

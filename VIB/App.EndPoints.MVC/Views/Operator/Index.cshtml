@@ -2,13 +2,19 @@
 
 <div class="container">
     <h2>ورود</h2>
+    @if (TempData["Message"] != null)
+    {
+            <div class="alert alert-danger">
+            @TempData["Message"]
+            </div>
+    }
     <form asp-action="Login" method="post">
         <div class="form-group">
-            <label for="username">نام‌کاربری:</label>
+            <label for="username">نام ‌کاربری :</label>
             <input type="text" id="username" name="username" asp-for="UserName" class="form-control" required>
         </div>
         <div class="form-group">
-            <label for="password">رمز عبور:</label>
+            <label for="password">رمز عبور :</label>
             <input type="password" id="password" name="password" asp-for="Password" class="form-control" required>
         </div>
         <button type="submit" class="btn btn-primary">ورود</button>

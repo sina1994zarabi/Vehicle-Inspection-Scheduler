@@ -43,11 +43,6 @@ namespace App.Domain.Service
             return _repository.Get(id);
         }
 
-        public Center GetCenterByName(string name)
-        {
-            return _repository.GetByName(name);
-        }
-
         public void RegisterNewCenter(Center center)
         {
             _repository.Add(center);

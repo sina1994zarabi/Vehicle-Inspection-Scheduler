@@ -1,11 +1,11 @@
 ﻿using App.Domain.Core.Contracts.Repository;
-using App.Domain.Core.Entities.Base.Entity;
 using App.Domain.Core.Entities.Inspection;
 using App.Domain.Core.Enums;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -26,47 +26,45 @@ namespace App.Infra.Data.Ef.Repositories
             _context.SaveChanges();
         }
 
-        public void ChangeStatusTo(int id, StatusEnum newStatus)
+        public string Delete(int id)
         {
-            var appoinment = Get(id);
-            appoinment.Status = newStatus;
-            _context.SaveChanges();
-        }
-
-        public Result Delete(int id)
-        {
-            var dateToDelete = _context.Appointments.FirstOrDefault(x => x.Id == id);
-            if (dateToDelete != null)
+            var appointmentToDelete = _context.Appointments.FirstOrDefault(x => x.Id == id);
+            if (appointmentToDelete != null)
             {
-                _context.Appointments.Remove(dateToDelete);
+                _context.Appointments.Remove(appointmentToDelete);
                 _context.SaveChanges();
-                return new Result(true, "Deleted Successfully");
+                return "Successfully Deleted";
             }
-            else return new Result(false, "Appointment Not Found");
-        }
-
-        public Appointment Get(int id)
-        {
-            return _context.Appointments.FirstOrDefault(x => x.Id == id);
+            else return "Not Found";
         }
 
         public List<Appointment> GetAll()
         {
             return _context.Appointments.
                 Include(x => x.Car).
-                Include(x => x.Center).
-                Include(x => x.TimeOfDaySlot).
-                Include(x => x.TimeOfDaySlot.Day).
                 ToList();
+        }
+
+        public Appointment GetById(int id)
+        {
+            return _context.Appointments.Include(x => x.Car).
+                FirstOrDefault(x => x.Id == id);
         }
 
         public void Update(int id, Appointment appointment)
         {
-            var dateToEdit = _context.Appointments.FirstOrDefault(x => x.Id == id);
-            dateToEdit.CenterId = appointment.CenterId;
-            dateToEdit.CarId = appointment.CarId;
-            dateToEdit.TimeOfDaySlotId = appointment.TimeOfDaySlotId;
+            var appontmentToEdit = GetById(id);
+            appontmentToEdit.Date = appointment.Date;
+            appontmentToEdit.CarId = appointment.CarId;
+            appontmentToEdit.CenterId = appointment.CenterId;
+        }
+
+        public string ChangeStatusTo(int id,StatusEnum newEnum)
+        {
+            var appointment = GetById(id);
+            appointment.Status = newEnum;
             _context.SaveChanges();
+            return "Status Changed Successfully";
         }
     }
 }

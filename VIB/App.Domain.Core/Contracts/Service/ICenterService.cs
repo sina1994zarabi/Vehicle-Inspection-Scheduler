@@ -12,7 +12,6 @@ namespace App.Domain.Core.Contracts.Service
     {
         void RegisterNewCenter(Center center);
         Center GetCenter(int id);
-        Center GetCenterByName(string name);
         List<Center> GetAllCenters();
         void ChangeCenterInfo(int id,Center center);
         Result Delete(int id);

@@ -2,6 +2,7 @@
 using App.Domain.Core.Enums;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,19 +15,15 @@ namespace App.Domain.Core.Entities.Inspection
         public int Id { get; set; }
         public int CarId { get; set; }
         public int CenterId { get; set; }
-        public int TimeOfDaySlotId { get; set; }
+        [Display(Name = "تاریخ نوبت")]
+        public DateTime Date { get; set; }
+        [Display(Name = "وضعیت")]
         public StatusEnum Status { get; set; }
         #endregion
 
         #region navigation properties
         public Car Car { get; set; }
         public Center Center { get; set; }
-        public TimeOfDaySlot TimeOfDaySlot { get; set; }
         #endregion
-
-        public Appointment()
-        {
-            
-        }
     }
 }

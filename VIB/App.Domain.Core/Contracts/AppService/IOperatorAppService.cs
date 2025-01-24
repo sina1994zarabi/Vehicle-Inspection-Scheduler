@@ -11,8 +11,8 @@ namespace App.Domain.Core.Contracts.AppService
     public interface IOperatorAppService
     {
         Result Login(string username, string password);
+        void LogOut();
         List<Appointment> ViewPendingAppointments();
-        void AddDaysWithSlots(int centerId,DateTime date,List<TimeSpan> timeSlots);
         void ConfirmAppointment(int appointmentId);
     }
 }

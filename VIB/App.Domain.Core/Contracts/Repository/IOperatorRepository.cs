@@ -12,7 +12,6 @@ namespace App.Domain.Core.Contracts.Repository
     {
         void Add(Operator @operator);
         Operator GetById(int id);
-        Operator GetByName(string username);
         List<Operator> GetAll();
         void Update(int id,Operator @operator);
         Result Delete(int id);

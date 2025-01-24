@@ -12,7 +12,6 @@ namespace App.Domain.Core.Contracts.Repository
     {
         void Add(Center center);
         Center Get(int id);
-        Center GetByName(string name);
         List<Center> GetAll();
         void Update(int id,Center center);
         Result Delete(int id);

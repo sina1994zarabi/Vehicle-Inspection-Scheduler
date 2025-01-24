@@ -15,6 +15,7 @@ namespace App.Domain.Core.Entities.Vehicle
         #region properties
         public int Id { get; set; }
 
+        public int UserId { get; set; }
 
         [Required]
         [StringLength(100)]
@@ -36,10 +37,16 @@ namespace App.Domain.Core.Entities.Vehicle
         [StringLength(50)]
         [Display(Name = "شماره پلاک")]
         public string LicensePlate { get; set; }
+
+        [Display(Name = "تاریخ آخرین معاینه")]
+        [DataType(DataType.Date)]
+        [RegularExpression(@"^\d{2}[آ-ی]\d{3}$", ErrorMessage = "شماره پلاک خودرو نامعتبر است.")]
+        public DateTime? LastInspectionDate { get; set; }
+
+
         #endregion
 
         #region navigation properties
-        public int UserId { get; set; }
         public User User { get; set; }
         #endregion
 

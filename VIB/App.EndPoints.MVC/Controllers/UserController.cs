@@ -30,7 +30,6 @@ namespace App.EndPoints.MVC.Controllers
         {
             _userAppService.Register(user);
             return RedirectToAction("LoginWithUsername");
-
         }
 
         public IActionResult LoginWithUsername()
@@ -47,9 +46,29 @@ namespace App.EndPoints.MVC.Controllers
                 InMemoryDb.CurrentUser = result.LoggedInUser;
                 return RedirectToAction("UserPanel");
             }
-            return View(result);
+            TempData["Message"] = result.Message;
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult LoginWithPhoneNumber(string phoneNumber) 
+        {
+            var result = _userAppService.LoginWithPhoneNumber(phoneNumber);
+            if (result.IsSucced)
+            {
+                InMemoryDb.CurrentUser = result.LoggedInUser;
+                return RedirectToAction("UserPanel");
+            }
+            TempData["Message"] = result.Message;
+            return View("Index");
         }
         
+        public IActionResult LogOut()
+        {
+            InMemoryDb.CurrentUser = null;
+            return RedirectToAction("Index");
+        }
+
         public IActionResult UserPanel()
         {
             var model = new UserPanelViewModel {
@@ -57,10 +76,12 @@ namespace App.EndPoints.MVC.Controllers
                 { 
                   new PanelSection { Title = "افزودن خودرو",
                       Description = "برای افزودن خودرو جدید کلیک کنید" ,
-                      Link = ""},
+                      Action = "Index",
+                      Controller = "Car"},
                   new PanelSection { Title = "نوبت دهی معاینه فنی",
                       Description = "برای اخد نوبت معاینه فنی کلیک کنید",
-                      Link = "BookingPanel" }
+                      Action = "Create",
+                      Controller = "Appointment"}
                   }};
             return View(model);
         }

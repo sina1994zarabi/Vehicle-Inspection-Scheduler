@@ -11,8 +11,6 @@ namespace App.Domain.Core.Contracts.Service
     {
         void Register(User user);
         User GetUserById(int id);
-        User GetUserByPhoneNumber(string phoneNumber);
-        User GetUserByUserName(string userName,string password);
         List<User> GetAllUsers();
         void ChangeUserInfo(int id, User user);
         void DeleteUserRecord(int id);

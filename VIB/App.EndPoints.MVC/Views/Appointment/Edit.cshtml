@@ -1,0 +1,16 @@
+﻿@model App.Domain.Core.Entities.Inspection.Appointment;
+@using FrameWork;
+
+<h2>ویرایش نوبت</h2>
+
+<form asp-action="Edit">
+    <div class="form-group">
+        <label for="Car">خودرو</label>
+        <input type="text" class="form-control" id="Car" name="Car" value="@Model.Car.Model" readonly />
+    </div>
+    <div class="form-group">
+        <label for="Date">تاریخ</label>
+        <input type="text" class="form-control" id="Date" name="Date" value="@Model.Date.ToPersianString()" />
+    </div>
+    <button type="submit" class="btn btn-primary">ذخیره</button>
+</form>

@@ -20,7 +20,7 @@ namespace App.Infra.Data.Ef.Repositories
 
         public void Add(Operator @operator)
         {
-            _context.Add(@operator);
+            _context.Operators.Add(@operator);
             _context.SaveChanges();
         }
 
@@ -44,11 +44,6 @@ namespace App.Infra.Data.Ef.Repositories
         public Operator GetById(int id)
         {
             return _context.Operators.FirstOrDefault(x => x.Id == id);
-        }
-
-        public Operator GetByName(string username)
-        {
-            return _context.Operators.FirstOrDefault(x => x.UserName == username);
         }
 
         public void Update(int id, Operator @operator)

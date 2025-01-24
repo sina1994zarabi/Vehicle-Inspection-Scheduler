@@ -1,77 +1,152 @@
 ﻿using App.Domain.Core.Contracts.AppService;
+using App.Domain.Core.Contracts.Service;
 using App.Domain.Core.Entities.Inspection;
+using App.Domain.Core.Enums;
 using App.EndPoints.MVC.Models;
 using App.Infra.Data.Db;
 using App.Services.AppService;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace App.EndPoints.MVC.Controllers
 {
     public class AppointmentController : Controller
     {
-        private readonly IAppointmentAppService _appService;
+        private readonly IAppointmentAppService _appointmentAppService;
+        private readonly ICarService _carService;
+        private readonly ICenterService _centerService;
         private readonly IVehicleAppService _vehicleAppService;
-        private readonly ICenterAppService _centerAppService;
 
-        public AppointmentController(IAppointmentAppService appService,
-            IVehicleAppService vehicleAppService,ICenterAppService centerAppService)
+        public AppointmentController(IAppointmentAppService appointmentAppService,
+            ICarService carService,ICenterService centerService, IVehicleAppService vehicleAppService)
         {
-            _appService = appService;
+            _appointmentAppService = appointmentAppService;
+            _carService = carService;
+            _centerService = centerService;
             _vehicleAppService = vehicleAppService;
-            _centerAppService = centerAppService;
         }
 
-        [HttpGet]
-        public IActionResult BookingPanel()
-        { 
-            var centers = _appService.GetCenters();
-            var cars = _appService.GetCarsByOwner(InMemoryDb.CurrentUser.Id);
-            var days = _appService.GetDays();
-            var model = new BookingViewModel
+        public IActionResult Index()
+        {
+            var appointments = _appointmentAppService.GetAllAppointments()
+                .Where(x => x.Car.UserId == InMemoryDb.CurrentUser.Id).
+                ToList();
+            return View(appointments);
+        }
+
+        public IActionResult Details(int id)
+        {
+            var appointment = _appointmentAppService.GetAppointmentById(id);
+            if (appointment == null)
             {
-                Centers = centers,
+                return NotFound();
+            }
+            return View(appointment);
+        }
+
+        public IActionResult Create()
+        {
+            List<DateTime> dates = new List<DateTime>();
+            for (int i = 0; i < 7; i++)
+            {
+                dates.Add(DateTime.Now.AddDays(i));
+            }
+            var TimeSlots = new List<TimeSpan>();
+            for (int i = 8;i < 20;i++)
+            {
+                TimeSlots.Add(TimeSpan.FromHours(i));
+            }
+            var cars = _carService.GetAllVehicles().
+                Where(x => x.UserId == InMemoryDb.CurrentUser.Id).ToList();
+            var centers = _centerService.GetAllCenters();
+            var model = new BookingPanelViewModel() 
+            {
+                AvailableDates = dates,
                 Cars = cars,
-                Days = days,
-                OwnerName = InMemoryDb.CurrentUser.FirstName + " " + InMemoryDb.CurrentUser.LastName
+                Centers = centers,
+                TimeSlots = TimeSlots
             };
             return View(model);
         }
 
-        public IActionResult PickBookingTime(int ownerId,int carId,int centerId,DateTime date)
-        {
-            AppointmentInfoHolder.CarId = carId;
-            AppointmentInfoHolder.CenterId = centerId;
-            var AvailableTimeSlots = _appService.GetAvailableSlots(centerId,date);
-            return View(AvailableTimeSlots);
-        }
-
         [HttpPost]
-        public IActionResult ScheduleAppointment(int timeSlotId) 
+        public IActionResult Create(BookingPanelViewModel appointmentInfo)
         {
-            var timeSlot = _appService.GetTimeById(timeSlotId);
-            Appointment appointment = new Appointment() 
+            var appointment = new Appointment()
             {
-                CarId = AppointmentInfoHolder.CarId,
-                CenterId = AppointmentInfoHolder.CenterId,
-                TimeOfDaySlotId = timeSlotId
-			};
-            _appService.ScheduleAppointment(appointment);
-            return RedirectToAction("BookingPanel");
+                CarId = appointmentInfo.CarId,
+                CenterId = appointmentInfo.CenterId,
+                Date = new DateTime(appointmentInfo.date.Year,
+                                    appointmentInfo.date.Month,
+                                    appointmentInfo.date.Day,
+                                    appointmentInfo.TimeSpan.Hours,
+                                    appointmentInfo.TimeSpan.Minutes,
+                                    appointmentInfo.TimeSpan.Seconds),
+                Status = StatusEnum.Pending
+            };
+        var result = _appointmentAppService.ScheduleAppointment(appointment);
+        TempData["Message"] = result;
+            return RedirectToAction("Create");
+    }
+    public IActionResult Edit(int id)
+    {
+            var appointment = _appointmentAppService.GetAppointmentById(id);
+            if (appointment == null)
+            {
+                return NotFound();
+            }
+            return View(appointment);
         }
 
-        public IActionResult ViewAppointments()
-        {
-            var userId = InMemoryDb.CurrentUser.Id;
-            var appointments = _appService.GetAllAppointments(userId);
-            return View(appointments);
-		}
-
         [HttpPost]
+        public IActionResult Edit(Appointment appointment)
+        {
+            if (ModelState.IsValid)
+            {
+                _appointmentAppService.ChangeAppointmentInfo(appointment);
+                return RedirectToAction("Index");
+            }
+            return View(appointment);
+        }
+
         public IActionResult Delete(int id)
         {
-            _appService.DeleteAppointment(id);
-            return RedirectToAction("ViewAppointments");
+            var appointment = _appointmentAppService.GetAppointmentById(id);
+            if (appointment == null)
+            {
+                return NotFound();
+            }
+            return View(appointment);
         }
-	}
+
+        [HttpPost]
+        public IActionResult DeleteConfirmed(int id)
+        {
+            _appointmentAppService.DeleteAppointment(id);
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult ScheduleAppointment()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult ScheduleAppointment(OwnerCarViewModel ownerCarViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = _vehicleAppService.ValidatePlateNumber(ownerCarViewModel.PlateNumber);
+                if (result == string.Empty)
+                {
+                    TempData["Message"] = "شماره پلاک نامعتبر است";
+                    return RedirectToAction("ScheduleAppointment");
+                }
+                return RedirectToAction("Create");
+            }
+            return View();
+        }
+
+    }
 }
