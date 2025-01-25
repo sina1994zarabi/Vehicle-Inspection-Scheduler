@@ -29,12 +29,8 @@ namespace App.EndPoints.MVC.Controllers
         [HttpPost]
         public IActionResult Create(Car car)
         {
-            if (ModelState.IsValid)
-            {
-                _vehicleAppService.AddNewCar(car);
-                return RedirectToAction("Index");
-            }
-            return View(car);
+            _vehicleAppService.AddNewCar(car);
+            return RedirectToAction("Index");
         }
 
         public IActionResult Details(int id)
@@ -60,12 +56,8 @@ namespace App.EndPoints.MVC.Controllers
         [HttpPost]
         public IActionResult Edit(Car car)
         {
-            if (ModelState.IsValid)
-            {
-                _vehicleAppService.EditCarInfo(car);
-                return RedirectToAction("Index");
-            }
-            return View(car);
+            _vehicleAppService.EditCarInfo(car);
+            return RedirectToAction("Index");
         }
 
         public IActionResult Delete(int id)

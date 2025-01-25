@@ -29,7 +29,7 @@ namespace App.EndPoints.MVC.Controllers
         public IActionResult ConfirmRegisteration(User user)
         {
             _userAppService.Register(user);
-            return RedirectToAction("LoginWithUsername");
+            return RedirectToAction("LoginW ithUsername");
         }
 
         public IActionResult LoginWithUsername()

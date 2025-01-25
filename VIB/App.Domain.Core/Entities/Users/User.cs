@@ -13,13 +13,13 @@ namespace App.Domain.Core.Entities.Users
     {
         #region Properties
         public int Id { get; set; }
-        [StringLength(20, MinimumLength = 3)]
+        [StringLength(20, MinimumLength = 3 , ErrorMessage = "نام باید حداقل 3 و حداکثر 20 کاراکتر باشد.")]
         [Required]
         [Display(Name = "نام")]
         public string FirstName { get; set; }
 
 
-        [StringLength(20, MinimumLength = 3)]
+        [StringLength(20, MinimumLength = 3, ErrorMessage = "نام خانوادگی باید حداقل 3 و حداکثر 20 کاراکتر باشد")]
         [Required]
         [Display(Name = "نام خانوادگی")]
         public string LastName { get; set; }
@@ -52,7 +52,7 @@ namespace App.Domain.Core.Entities.Users
 
 
         [Required]
-        [RegularExpression(@"^0\d{10}$", ErrorMessage = "شماره موبایل نا معتبر است")]
+        [RegularExpression(@"^0\d{11}$", ErrorMessage = "شماره موبایل نا معتبر است")]
         [Display(Name = "شماره موبایل")]
         public string PhoneNumber { get; set; }
 

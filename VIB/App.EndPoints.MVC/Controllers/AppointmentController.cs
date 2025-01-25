@@ -1,11 +1,15 @@
 ﻿using App.Domain.Core.Contracts.AppService;
 using App.Domain.Core.Contracts.Service;
 using App.Domain.Core.Entities.Inspection;
+using App.Domain.Core.Entities.Vehicle;
 using App.Domain.Core.Enums;
 using App.EndPoints.MVC.Models;
 using App.Infra.Data.Db;
 using App.Services.AppService;
+using FrameWork;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -19,7 +23,7 @@ namespace App.EndPoints.MVC.Controllers
         private readonly IVehicleAppService _vehicleAppService;
 
         public AppointmentController(IAppointmentAppService appointmentAppService,
-            ICarService carService,ICenterService centerService, IVehicleAppService vehicleAppService)
+            ICarService carService, ICenterService centerService, IVehicleAppService vehicleAppService)
         {
             _appointmentAppService = appointmentAppService;
             _carService = carService;
@@ -53,14 +57,14 @@ namespace App.EndPoints.MVC.Controllers
                 dates.Add(DateTime.Now.AddDays(i));
             }
             var TimeSlots = new List<TimeSpan>();
-            for (int i = 8;i < 20;i++)
+            for (int i = 8; i < 20; i++)
             {
                 TimeSlots.Add(TimeSpan.FromHours(i));
             }
             var cars = _carService.GetAllVehicles().
                 Where(x => x.UserId == InMemoryDb.CurrentUser.Id).ToList();
             var centers = _centerService.GetAllCenters();
-            var model = new BookingPanelViewModel() 
+            var model = new BookingPanelViewModel()
             {
                 AvailableDates = dates,
                 Cars = cars,
@@ -85,12 +89,12 @@ namespace App.EndPoints.MVC.Controllers
                                     appointmentInfo.TimeSpan.Seconds),
                 Status = StatusEnum.Pending
             };
-        var result = _appointmentAppService.ScheduleAppointment(appointment);
-        TempData["Message"] = result;
+            var result = _appointmentAppService.ScheduleAppointment(appointment);
+            TempData["Message"] = result;
             return RedirectToAction("Create");
-    }
-    public IActionResult Edit(int id)
-    {
+        }
+        public IActionResult Edit(int id)
+        {
             var appointment = _appointmentAppService.GetAppointmentById(id);
             if (appointment == null)
             {
@@ -127,25 +131,54 @@ namespace App.EndPoints.MVC.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        public IActionResult ScheduleAppointment()
+        public IActionResult InspectionRequest()
         {
-            return View();
+            var centers = _centerService.GetAllCenters().
+                Select(c => new SelectListItem
+                {
+                    Value = c.Id.ToString(),
+                    Text = c.Name
+                }).ToList();
+            var viewModel = new InspectionRequestViewModel()
+            {
+                Centers = centers
+            };
+            return View(viewModel);
         }
 
         [HttpPost]
-        public IActionResult ScheduleAppointment(OwnerCarViewModel ownerCarViewModel)
+        public IActionResult ProcessInspectionRequest(InspectionRequestViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var result = _vehicleAppService.ValidatePlateNumber(ownerCarViewModel.PlateNumber);
-                if (result == string.Empty)
+                //var result = _vehicleAppService.ValidatePlateNumber(inspectionRequestViewModel.PlateNumber);
+                //if (result == string.Empty)
+                //{
+                //    TempData["Message"] = "شماره پلاک نامعتبر است";
+                //    return RedirectToAction("ScheduleAppointment");
+                //}
+                //return RedirectToAction("Create");
+                var car = new Car
                 {
-                    TempData["Message"] = "شماره پلاک نامعتبر است";
-                    return RedirectToAction("ScheduleAppointment");
-                }
-                return RedirectToAction("Create");
+                    UserId = 1,
+                    Model = model.CarModel,
+                    Make = model.CarMake,
+                    Year = model.Year,
+                    LicensePlate = model.PlateNumber,
+                    LastInspectionDate = null //
+                };
+                var appointment = new Appointment
+                {
+                    CarId = car.Id,
+                    CenterId = model.CenterId,
+                    Date = model.Date.Date + model.TimeOfDay,
+                    Status = StatusEnum.Pending
+                };
+                var result = _appointmentAppService.ScheduleAppointment(appointment);
+                TempData["Messege"] = result;
+                return RedirectToAction("InspectionRequest");
             }
-            return View();
+            return RedirectToAction("InspectionRequest");
         }
 
     }

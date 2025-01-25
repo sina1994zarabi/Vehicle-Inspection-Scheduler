@@ -28,7 +28,7 @@ namespace App.Domain.Core.Entities.Vehicle
         public MakeEnum Make { get; set; }
 
         [Required]
-        [Range(1886, 9999, ErrorMessage = "Please enter a valid year.")]
+        [Range(1370, 1403, ErrorMessage = "Please enter a valid year.")]
         [Display(Name = "سال تولید")]
         public int Year { get; set; }
 
@@ -36,11 +36,11 @@ namespace App.Domain.Core.Entities.Vehicle
         [Required]
         [StringLength(50)]
         [Display(Name = "شماره پلاک")]
+        //[RegularExpression(@"^\d{2}[آ-ی]\d{3}$", ErrorMessage = "شماره پلاک خودرو نامعتبر است.")]
         public string LicensePlate { get; set; }
 
         [Display(Name = "تاریخ آخرین معاینه")]
         [DataType(DataType.Date)]
-        [RegularExpression(@"^\d{2}[آ-ی]\d{3}$", ErrorMessage = "شماره پلاک خودرو نامعتبر است.")]
         public DateTime? LastInspectionDate { get; set; }
 
 

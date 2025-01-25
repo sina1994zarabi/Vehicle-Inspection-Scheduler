@@ -3,6 +3,7 @@ using App.Domain.Core.Contracts.Service;
 using App.Domain.Core.Entities.Inspection;
 using App.Domain.Core.Entities.Vehicle;
 using App.Domain.Core.Enums;
+using FrameWork;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -81,9 +82,9 @@ namespace App.Services.AppService
         public string ScheduleAppointment(Appointment appointment)
         {
             var car = _carService.GetVehicle(appointment.CarId);
-            if (car == null) return "Car Not Found";
+            if (car == null) return "خودرو یافت نشد";
 
-            var currentYear = DateTime.Now.Year;
+            var currentYear = int.Parse(DateTime.Now.ToPersianString().Split('/')[0]);
             if (currentYear - car.Year > 5)
             {
                 _rejectedCarService.AddRejectedCar(new RejectedCar
@@ -92,7 +93,7 @@ namespace App.Services.AppService
                     RejectionReason = "عمر خودرو بیش از 5 سال است",
                     RejectionDate = DateTime.Now
                 });
-                return "Car is older than 5 years and cannot be inspected.";
+                return "عمر خودرو بیش تر از 5 سال است.";
             };
 
             var dayOfWeek = appointment.Date.DayOfWeek;
@@ -125,7 +126,6 @@ namespace App.Services.AppService
 
             _appontmentService.CreateAppointment(appointment);
             return "نوبت معاینه فنی با موفقیت ثبت شد";
-
         }
     }
 }

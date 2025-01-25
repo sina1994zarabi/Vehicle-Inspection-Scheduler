@@ -1,0 +1,73 @@
+﻿@model InspectionRequestViewModel
+@using App.Domain.Core.Enums
+
+@if (TempData["Message"] != null)
+{
+            <div class="alert alert-danger">
+                @TempData["Message"]
+            </div>
+}
+
+<h2>ثبت اطلاعات </h2>
+
+<form asp-action="ProcessInspectionRequest" method="post" class="form-horizontal">
+    <div class="form-group">
+        <label asp-for="IdNumber" class="control-label">کد ملی</label>
+        <input asp-for="IdNumber" class="form-control" />
+        <span asp-validation-for="IdNumber" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CarModel" class="control-label">مدل خودرو</label>
+        <input asp-for="CarModel" class="form-control" />
+        <span asp-validation-for="CarModel" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CarMake" class="control-label">شرکت سازنده</label>
+        <select asp-for="CarMake" asp-items="Html.GetEnumSelectList<MakeEnum>()" class="form-control">
+            <option value="">-- انتخاب کنید --</option>
+        </select>
+        <span asp-validation-for="CarMake" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="PlateNumber" class="control-label">پلاک خودرو</label>
+        <input asp-for="PlateNumber" class="form-control" />
+        <span asp-validation-for="PlateNumber" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Year" class="control-label"></label>
+        <input asp-for="Year" class="form-control" type="number" min="1370" max="1403" />
+        <span asp-validation-for="Year" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">    
+        <label asp-for="Date" class="control-label">تاریخ</label>
+        <input asp-for="Date" class="form-control" type="date" />
+        <span asp-validation-for="Date" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="TimeOfDay" class="control-label">زمان</label>
+        <input asp-for="TimeOfDay" class="form-control" type="time" />
+        <span asp-validation-for="TimeOfDay" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CenterId" class="control-label">مرکز معاینه</label>
+        <select asp-for="CenterId" asp-items="Model.Centers" class="form-control">
+            <option value="">-- انتخاب کنید --</option>
+        </select>
+        <span asp-validation-for="CenterId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">ارسال درخواست</button>
+    </div>
+</form>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>

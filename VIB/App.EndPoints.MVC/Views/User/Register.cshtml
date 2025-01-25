@@ -4,8 +4,19 @@
     <h2>ثبت‌نام</h2>
     <form asp-action="ConfirmRegisteration" method="post">
         <div class="form-group">
+            <label for="firstname">نام: </label>
+            <input type="text" id="firstname" name="firstname" asp-for="FirstName" class="form-control" required>
+            <span asp-validation-for="FirstName" class = "text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label for="lastname">نام خانوادگی: </label>
+            <input type="text" id="lastname" name="lastname" asp-for="FirstName" class="form-control" required>
+            <span asp-validation-for="LastName" class = "text-danger"></span>
+        </div>
+        <div class="form-group">
             <label for="nationalId">کد ملی:</label>
             <input type="text" id="nationalId" name="NationalId" asp-for="IdentificationNumber" class="form-control" required>
+            <span asp-validation-for="IdentificationNumber" class = "text-danger"></span>
         </div>
         <div class="form-group">
             <label for="birthDay">روز تولد:</label>
@@ -28,7 +39,7 @@
         <div class="form-group">
             <label for="birthYear">سال تولد:</label>
             <select id="birthYear" name="BirthYear" asp-for="DateOfBirth.Year" class="form-control" required>
-                @for (int i = DateTime.Now.Year; i >= 1900; i--)
+                @for (int i = 1385; i >= 1300; i--)
                 {
                         <option value="@i">@i</option>
                 }
@@ -37,14 +48,17 @@
         <div class="form-group">
             <label for="username">نام‌کاربری:</label>
             <input type="text" id="username" name="Username" asp-for="Username" class="form-control" required>
+            <span asp-validation-for="Username" class = "text-danger"></span>
         </div>
         <div class="form-group">
             <label for="password">رمز عبور:</label>
             <input type="password" id="password" name="Password" asp-for="Password" class="form-control" required>
+            <span asp-validation-for="Password" class = "text-danger"></span>
         </div>
         <div class="form-group">
             <label for="mobileNumber">شماره تلفن همراه:</label>
             <input type="text" id="mobileNumber" name="MobileNumber" asp-for="PhoneNumber" class="form-control" required>
+            <span asp-validation-for="PhoneNumber" class= "text-danger"></span>
         </div>
         <button type="submit" class="btn btn-primary">ثبت نام</button>
         <a  class="btn btn-secondary" asp-action="Index">بازگشت</a>
@@ -112,3 +126,7 @@ button:hover {
 }
 
 </style>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
