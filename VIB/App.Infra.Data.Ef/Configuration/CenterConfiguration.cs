@@ -15,7 +15,7 @@ namespace App.Infra.Data.Ef.Configuration
         {
             builder.HasData(new List<Center>() {
                 new Center { Id = 1, Name = "مرکز 1" , Address = "آدرس مرکز یک" , ContactNumber = "xxxxxxxxx"},
-                new Center { Id = 2, Name = "مرکز 2" , Address = "آدرس مرکز دو" , ContactNumber = "xxxxxxxxx"}
+                new Center { Id = 2, Name = "مرکز 2" , Address = "آدرس مرکز دو" , ContactNumber = "yyyyyyyyy"}
             });
         }
     }

@@ -87,7 +87,7 @@ namespace App.Infra.Data.Ef.Migrations
                         {
                             Id = 2,
                             Address = "آدرس مرکز دو",
-                            ContactNumber = "xxxxxxxxx",
+                            ContactNumber = "yyyyyyyyy",
                             Name = "مرکز 2"
                         });
                 });
@@ -99,6 +99,17 @@ namespace App.Infra.Data.Ef.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("DateHired")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
                         .IsRequired()
@@ -117,6 +128,9 @@ namespace App.Infra.Data.Ef.Migrations
                         new
                         {
                             Id = 1,
+                            DateHired = new DateTime(2025, 1, 27, 12, 38, 39, 5, DateTimeKind.Local).AddTicks(8633),
+                            Email = "Admin@Gmail.Com",
+                            FullName = "AdminFullName",
                             Password = "Admin@123",
                             UserName = "Admin"
                         });
@@ -130,10 +144,10 @@ namespace App.Infra.Data.Ef.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DateOfBirth")
+                    b.Property<DateTime>("DateRegistered")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("FirstName")
@@ -164,7 +178,8 @@ namespace App.Infra.Data.Ef.Migrations
 
                     b.Property<string>("Username")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.HasKey("Id");
 
@@ -174,8 +189,8 @@ namespace App.Infra.Data.Ef.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 1, 20, 18, 19, 19, 460, DateTimeKind.Local).AddTicks(9745),
                             DateOfBirth = new DateTime(1994, 8, 27, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DateRegistered = new DateTime(2025, 1, 27, 12, 38, 39, 5, DateTimeKind.Local).AddTicks(7538),
                             FirstName = "سینا",
                             Gender = 1,
                             IdentificationNumber = "3241327892",
@@ -226,11 +241,11 @@ namespace App.Infra.Data.Ef.Migrations
                         new
                         {
                             Id = 1,
-                            LicensePlate = "ABC-1234",
+                            LicensePlate = "12-345",
                             Make = 1,
                             Model = "سمند",
                             UserId = 1,
-                            Year = 2021
+                            Year = 1400
                         });
                 });
 
@@ -248,14 +263,7 @@ namespace App.Infra.Data.Ef.Migrations
                     b.Property<DateTime>("RejectionDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("RejectionReason")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("CarId");
 
                     b.ToTable("RejectedCars");
                 });
@@ -282,7 +290,7 @@ namespace App.Infra.Data.Ef.Migrations
             modelBuilder.Entity("App.Domain.Core.Entities.Vehicle.Car", b =>
                 {
                     b.HasOne("App.Domain.Core.Entities.Users.User", "User")
-                        .WithMany("cars")
+                        .WithMany("Cars")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -290,20 +298,9 @@ namespace App.Infra.Data.Ef.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("App.Domain.Core.Entities.Vehicle.RejectedCar", b =>
-                {
-                    b.HasOne("App.Domain.Core.Entities.Vehicle.Car", "Car")
-                        .WithMany()
-                        .HasForeignKey("CarId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Car");
-                });
-
             modelBuilder.Entity("App.Domain.Core.Entities.Users.User", b =>
                 {
-                    b.Navigation("cars");
+                    b.Navigation("Cars");
                 });
 #pragma warning restore 612, 618
         }

@@ -47,7 +47,7 @@ namespace App.Infra.Data.Ef.Repositories
 
         public Appointment GetById(int id)
         {
-            return _context.Appointments.Include(x => x.Car).
+            return _context.Appointments.
                 FirstOrDefault(x => x.Id == id);
         }
 

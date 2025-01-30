@@ -20,6 +20,7 @@ namespace App.Infra.Data.Ef.Repositories
         public void ADD(RejectedCar rejectedCar)
         {
             _context.RejectedCars.Add(rejectedCar);
+            _context.SaveChanges();
         }
 
         public void Delete(int id)
@@ -47,7 +48,6 @@ namespace App.Infra.Data.Ef.Repositories
             if (existingCar == null) throw new Exception("Rejected car not found.");
 
             existingCar.CarId = rejectedCar.CarId;
-            existingCar.RejectionReason = rejectedCar.RejectionReason;
             existingCar.RejectionDate = rejectedCar.RejectionDate;
 
             _context.SaveChanges(); ;

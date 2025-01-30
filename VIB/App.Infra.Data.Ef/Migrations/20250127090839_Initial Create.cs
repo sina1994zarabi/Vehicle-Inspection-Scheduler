@@ -34,12 +34,29 @@ namespace App.Infra.Data.Ef.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DateHired = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Operators", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RejectedCars",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CarId = table.Column<int>(type: "int", nullable: false),
+                    RejectionDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RejectedCars", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -50,9 +67,9 @@ namespace App.Infra.Data.Ef.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FirstName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Username = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Password = table.Column<string>(type: "nvarchar(16)", maxLength: 16, nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DateRegistered = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
                     IdentificationNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -115,50 +132,29 @@ namespace App.Infra.Data.Ef.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "RejectedCars",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CarId = table.Column<int>(type: "int", nullable: false),
-                    RejectionReason = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
-                    RejectionDate = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RejectedCars", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_RejectedCars_Cars_CarId",
-                        column: x => x.CarId,
-                        principalTable: "Cars",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.InsertData(
                 table: "Centers",
                 columns: new[] { "Id", "Address", "ContactNumber", "Name" },
                 values: new object[,]
                 {
                     { 1, "آدرس مرکز یک", "xxxxxxxxx", "مرکز 1" },
-                    { 2, "آدرس مرکز دو", "xxxxxxxxx", "مرکز 2" }
+                    { 2, "آدرس مرکز دو", "yyyyyyyyy", "مرکز 2" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Operators",
-                columns: new[] { "Id", "Password", "UserName" },
-                values: new object[] { 1, "Admin@123", "Admin" });
+                columns: new[] { "Id", "DateHired", "Email", "FullName", "Password", "UserName" },
+                values: new object[] { 1, new DateTime(2025, 1, 27, 12, 38, 39, 5, DateTimeKind.Local).AddTicks(8633), "Admin@Gmail.Com", "AdminFullName", "Admin@123", "Admin" });
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "CreatedAt", "DateOfBirth", "FirstName", "Gender", "IdentificationNumber", "LastName", "Password", "PhoneNumber", "Username" },
-                values: new object[] { 1, new DateTime(2025, 1, 20, 18, 19, 19, 460, DateTimeKind.Local).AddTicks(9745), new DateTime(1994, 8, 27, 0, 0, 0, 0, DateTimeKind.Unspecified), "سینا", 1, "3241327892", "ضرابی", "sina@1994zarabi", "09367559646", "sinazarabi" });
+                columns: new[] { "Id", "DateOfBirth", "DateRegistered", "FirstName", "Gender", "IdentificationNumber", "LastName", "Password", "PhoneNumber", "Username" },
+                values: new object[] { 1, new DateTime(1994, 8, 27, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2025, 1, 27, 12, 38, 39, 5, DateTimeKind.Local).AddTicks(7538), "سینا", 1, "3241327892", "ضرابی", "sina@1994zarabi", "09367559646", "sinazarabi" });
 
             migrationBuilder.InsertData(
                 table: "Cars",
                 columns: new[] { "Id", "LastInspectionDate", "LicensePlate", "Make", "Model", "UserId", "Year" },
-                values: new object[] { 1, null, "ABC-1234", 1, "سمند", 1, 2021 });
+                values: new object[] { 1, null, "12-345", 1, "سمند", 1, 1400 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Appointments_CarId",
@@ -174,11 +170,6 @@ namespace App.Infra.Data.Ef.Migrations
                 name: "IX_Cars_UserId",
                 table: "Cars",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RejectedCars_CarId",
-                table: "RejectedCars",
-                column: "CarId");
         }
 
         /// <inheritdoc />
@@ -194,10 +185,10 @@ namespace App.Infra.Data.Ef.Migrations
                 name: "RejectedCars");
 
             migrationBuilder.DropTable(
-                name: "Centers");
+                name: "Cars");
 
             migrationBuilder.DropTable(
-                name: "Cars");
+                name: "Centers");
 
             migrationBuilder.DropTable(
                 name: "Users");

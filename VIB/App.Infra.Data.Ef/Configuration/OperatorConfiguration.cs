@@ -12,11 +12,9 @@ namespace App.Infra.Data.Ef.Configuration
 {
     public class OperatorConfiguration : IEntityTypeConfiguration<Operator>
     {
-        
-
         public void Configure(EntityTypeBuilder<Operator> builder)
         {
-            builder.HasData(new Operator() { Id = 1, UserName = "Admin", Password = "Admin@123"});
+            builder.HasData(new Operator() { Id = 1, FullName = "AdminFullName", UserName = "Admin", Password = "Admin@123" , Email = "Admin@Gmail.Com", DateHired = DateTime.Now});
         }
     }
 }

@@ -11,7 +11,6 @@ namespace App.Domain.Core.Entities.Vehicle
 {
     public class Car
     {
-
         #region properties
         public int Id { get; set; }
 
@@ -28,7 +27,7 @@ namespace App.Domain.Core.Entities.Vehicle
         public MakeEnum Make { get; set; }
 
         [Required]
-        [Range(1370, 1403, ErrorMessage = "Please enter a valid year.")]
+        [Range(1370, 1403, ErrorMessage = "سال تولید باید بین 1370 تا 1400 باشد.")]
         [Display(Name = "سال تولید")]
         public int Year { get; set; }
 
@@ -36,19 +35,16 @@ namespace App.Domain.Core.Entities.Vehicle
         [Required]
         [StringLength(50)]
         [Display(Name = "شماره پلاک")]
-        //[RegularExpression(@"^\d{2}[آ-ی]\d{3}$", ErrorMessage = "شماره پلاک خودرو نامعتبر است.")]
+        [RegularExpression(@"^\d{2}-\d{3}$", ErrorMessage = "شماره پلاک خودرو نامعتبر است.")]
         public string LicensePlate { get; set; }
 
         [Display(Name = "تاریخ آخرین معاینه")]
         [DataType(DataType.Date)]
         public DateTime? LastInspectionDate { get; set; }
-
-
         #endregion
 
-        #region navigation properties
-        public User User { get; set; }
+        #region Navigation Property
+        public User? User { get; set; }
         #endregion
-
     }
 }

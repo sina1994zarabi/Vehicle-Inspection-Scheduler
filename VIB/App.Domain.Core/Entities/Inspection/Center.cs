@@ -14,9 +14,5 @@ namespace App.Domain.Core.Entities.Inspection
         public string Address { get; set; }
         public string ContactNumber { get; set; }
         #endregion
-
-        #region navigation properties
-        List<Appointment> Appoinments { get; set; }
-        #endregion
     }
 }

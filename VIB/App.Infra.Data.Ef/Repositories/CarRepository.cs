@@ -46,7 +46,6 @@ namespace App.Infra.Data.Ef.Repositories
         public List<Car> GetAll()
         {
             return _context.Cars.
-                Include(x => x.User).
                 ToList();
         }
 

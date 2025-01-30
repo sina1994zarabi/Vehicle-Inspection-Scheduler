@@ -90,7 +90,6 @@ namespace App.EndPoints.MVC.Controllers
             var rejectedCar = new RejectedCar() {
                 CarId = car.Id,
                 RejectionDate = DateTime.Now,
-                RejectionReason = string.Empty
             };
             _vehicleAppService.LogRejectedCar(rejectedCar);
             return RedirectToAction("ViewPendingAppointments");

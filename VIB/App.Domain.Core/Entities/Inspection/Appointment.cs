@@ -21,9 +21,9 @@ namespace App.Domain.Core.Entities.Inspection
         public StatusEnum Status { get; set; }
         #endregion
 
-        #region navigation properties
-        public Car Car { get; set; }
-        public Center Center { get; set; }
+        #region Navigation Properties
+        public Car? Car { get; set; }
+        public Center? Center { get; set; }
         #endregion
     }
 }

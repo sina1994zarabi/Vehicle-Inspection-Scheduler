@@ -3,6 +3,7 @@ using App.Domain.Core.Contracts.Service;
 using App.Domain.Core.Entities.Inspection;
 using App.Domain.Core.Entities.Vehicle;
 using App.Domain.Core.Enums;
+using App.EndPoints.MVC.ApiServices;
 using App.EndPoints.MVC.Models;
 using App.Infra.Data.Db;
 using App.Services.AppService;
@@ -13,6 +14,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
+
 namespace App.EndPoints.MVC.Controllers
 {
     public class AppointmentController : Controller
@@ -22,20 +24,32 @@ namespace App.EndPoints.MVC.Controllers
         private readonly ICenterService _centerService;
         private readonly IVehicleAppService _vehicleAppService;
 
+        private readonly AppointmentApiService _appointmentApiService;
+
+
+
+
         public AppointmentController(IAppointmentAppService appointmentAppService,
-            ICarService carService, ICenterService centerService, IVehicleAppService vehicleAppService)
+            ICarService carService, ICenterService centerService,
+            IVehicleAppService vehicleAppService,
+            AppointmentApiService appointmentApiService)
         {
             _appointmentAppService = appointmentAppService;
             _carService = carService;
             _centerService = centerService;
             _vehicleAppService = vehicleAppService;
+            _appointmentApiService = appointmentApiService;
         }
 
         public IActionResult Index()
         {
-            var appointments = _appointmentAppService.GetAllAppointments()
-                .Where(x => x.Car.UserId == InMemoryDb.CurrentUser.Id).
-                ToList();
+            //var appointments = _appointmentAppService.GetAllAppointments()
+            //    .Where(x => x.Car.UserId == InMemoryDb.CurrentUser.Id).
+            //    ToList();
+            //return View(appointments);
+            var resultJson = _appointmentApiService.GetAppointments();
+            var appointments = System.Text.Json.JsonSerializer.
+                Deserialize<List<Appointment>>(resultJson);
             return View(appointments);
         }
 

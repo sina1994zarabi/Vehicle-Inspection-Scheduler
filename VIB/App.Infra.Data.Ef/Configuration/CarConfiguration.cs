@@ -2,11 +2,13 @@
 using App.Domain.Core.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using FrameWork;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 
 namespace App.Infra.Data.Ef.Configuration
 {
@@ -20,9 +22,9 @@ namespace App.Infra.Data.Ef.Configuration
                     Id = 1,
                     Make = MakeEnum.A,
                     Model = "سمند",
-                    LicensePlate = "ABC-1234",
+                    LicensePlate = "12-345",
                     UserId = 1,
-                    Year = new DateTime(2021,1,1).Year                
+                    Year = 1400                
                 } });
         }
     }

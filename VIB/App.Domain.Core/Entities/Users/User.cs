@@ -1,4 +1,5 @@
-﻿using App.Domain.Core.Entities.Vehicle;
+﻿using App.Domain.Core.Entities.Inspection;
+using App.Domain.Core.Entities.Vehicle;
 using App.Domain.Core.Enums;
 using System;
 using System.Collections.Generic;
@@ -34,9 +35,11 @@ namespace App.Domain.Core.Entities.Users
         public string Password { get; set; }
 
 
+        
+
         [Display(Name = "تاریخ ثبت نام")]
         [DataType(DataType.Date)]
-        public DateTime CreatedAt { get; set; }
+        public DateTime DateRegistered { get; set; }
 
 
 
@@ -61,7 +64,7 @@ namespace App.Domain.Core.Entities.Users
         #endregion
 
         #region NavigationProperties
-        public List<Car> cars { get; set; }
+        public List<Car> Cars { get; set; }
         #endregion
     }
 }

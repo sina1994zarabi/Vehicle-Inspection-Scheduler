@@ -77,12 +77,10 @@ namespace App.Services.AppService
            _appontmentService.ChangeStatusTo(id,StatusEnum.Rejected);
         }
 
-
-        
         public string ScheduleAppointment(Appointment appointment)
         {
             var car = _carService.GetVehicle(appointment.CarId);
-            if (car == null) return "خودرو یافت نشد";
+            if (car == null) return "خودرو با مشخصات وارد شده یافت نشد.";
 
             var currentYear = int.Parse(DateTime.Now.ToPersianString().Split('/')[0]);
             if (currentYear - car.Year > 5)
@@ -90,9 +88,9 @@ namespace App.Services.AppService
                 _rejectedCarService.AddRejectedCar(new RejectedCar
                 {
                     CarId = car.Id,
-                    RejectionReason = "عمر خودرو بیش از 5 سال است",
                     RejectionDate = DateTime.Now
                 });
+                
                 return "عمر خودرو بیش تر از 5 سال است.";
             };
 

@@ -13,6 +13,5 @@ namespace App.Domain.Core.Contracts.AppService
         Result Register(User user);
         Result LoginWithPhoneNumber(string phoneNumber);
         Result LoginWithUserName(string userName,string password);
-        
     }
 }
