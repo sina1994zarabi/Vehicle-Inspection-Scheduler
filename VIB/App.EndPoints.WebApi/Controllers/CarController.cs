@@ -88,8 +88,8 @@ namespace App.EndPoints.WebApi.Controllers
 			return Ok("ثبت خودرو جدید با موفقیت انجام شد.");
 		}
 
-		[HttpDelete]
-		public async Task<IActionResult> DeleteCar(int id)
+		[HttpDelete("{id}")]
+		public async Task<IActionResult> Delete(int id)
 		{
 			//if (!ValidateApiKey()) return Unauthorized();
 			#region DbContextAccess

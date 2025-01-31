@@ -65,7 +65,7 @@ namespace App.EndPoints.WebApi.Controllers
 			//_appDbContext.Appointments.Add(appointment);
 			//await _appDbContext.SaveChangesAsync();
 			#endregion
-			var result = _appointmentAppService.ScheduleAppointment(appointment);
+			var result = await _appointmentAppService.ScheduleAppointment(appointment);
 			return Ok(result);
 		}
 
