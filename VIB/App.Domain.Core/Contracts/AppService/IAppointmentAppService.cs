@@ -10,14 +10,14 @@ namespace App.Domain.Core.Contracts.AppService
 {
     public interface IAppointmentAppService
     {
-        List<Appointment> GetAllAppointments();
-        Appointment GetAppointmentById(int id);
-        string ScheduleAppointment(Appointment appointment);
-        void ConfirmAppointment(int id);
-        void RejectAppointment(int id, string rejectionReason);
-        void ChangeAppointmentInfo(Appointment appointment);
-        void DeleteAppointment(int id);
-        List<Appointment> GetAppointmentsByDate(DateTime date);
+        Task<List<Appointment>> GetAllAppointments();
+        Task<Appointment> GetAppointmentById(int id);
+        Task<string> ScheduleAppointment(Appointment appointment);
+        //void ConfirmAppointment(int id);
+        //void RejectAppointment(int id, string rejectionReason);
+        Task ChangeAppointmentInfo(Appointment appointment);
+        Task<string> DeleteAppointment(int id);
+        //List<Appointment> GetAppointmentsByDate(DateTime date);
         List<RejectedCar> GetRejectedCars();
     }
 }

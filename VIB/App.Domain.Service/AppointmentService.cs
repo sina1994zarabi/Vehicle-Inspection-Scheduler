@@ -20,34 +20,34 @@ namespace App.Services.Service
             _appointmentRepository = appointmentRepository;
         }
 
-        public void ChangeAppointmentInfo(int id,Appointment appointment)
+        public async Task ChangeAppointmentInfo(int id,Appointment appointment)
         {
-            _appointmentRepository.Update(id,appointment);
+            await _appointmentRepository.Update(id,appointment);
         }
 
-        public string ChangeStatusTo(int id, StatusEnum status)
+        //public string ChangeStatusTo(int id, StatusEnum status)
+        //{
+        //    return _appointmentRepository.ChangeStatusTo(id,status);
+        //}
+
+        public async Task CreateAppointment(Appointment appointment)
         {
-            return _appointmentRepository.ChangeStatusTo(id,status);
+             await _appointmentRepository.Add(appointment);
         }
 
-        public void CreateAppointment(Appointment appointment)
+        public async Task<string> Delete(int id)
         {
-            _appointmentRepository.Add(appointment);
+            return await _appointmentRepository.Delete(id);
         }
 
-        public string Delete(int id)
+        public async Task<List<Appointment>> GetAll()
         {
-            return _appointmentRepository.Delete(id);
+            return await _appointmentRepository.GetAll();
         }
 
-        public List<Appointment> GetAll()
+        public async Task<Appointment> GetById(int id)
         {
-            return _appointmentRepository.GetAll();
-        }
-
-        public Appointment GetById(int id)
-        {
-            return _appointmentRepository.GetById(id);
+            return await _appointmentRepository.GetById(id);
         }
     }
 }

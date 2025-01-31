@@ -37,49 +37,49 @@ namespace App.Services.AppService
         
 
 
-        public void ChangeAppointmentInfo(Appointment appointment)
+        public async Task ChangeAppointmentInfo(Appointment appointment)
         {
-            _appontmentService.ChangeAppointmentInfo(appointment.Id,appointment);
+            await _appontmentService.ChangeAppointmentInfo(appointment.Id,appointment);
         }
 
-        public void ConfirmAppointment(int id)
+        //public void ConfirmAppointment(int id)
+        //{
+        //    _appontmentService.ChangeStatusTo(id,StatusEnum.Confirmed);
+        //}
+
+        public async Task<string> DeleteAppointment(int id)
         {
-            _appontmentService.ChangeStatusTo(id,StatusEnum.Confirmed);
+            return await _appontmentService.Delete(id);
         }
 
-        public void DeleteAppointment(int id)
+        public async Task<List<Appointment>> GetAllAppointments()
         {
-            _appontmentService.Delete(id);
+             return await _appontmentService.GetAll();
         }
 
-        public List<Appointment> GetAllAppointments()
+        public async Task<Appointment> GetAppointmentById(int id)
         {
-            return _appontmentService.GetAll();
+            return  await _appontmentService.GetById(id);
         }
 
-        public Appointment GetAppointmentById(int id)
-        {
-            return  _appontmentService.GetById(id);
-        }
-
-        public List<Appointment> GetAppointmentsByDate(DateTime date)
-        {
-            return _appontmentService.GetAll().Where(x => x.Date.Day == date.Day).ToList();
-        }
+        //public List<Appointment> GetAppointmentsByDate(DateTime date)
+        //{
+        //    return _appontmentService.GetAll().Where(x => x.Date.Day == date.Day).ToList();
+        //}
 
         public List<RejectedCar> GetRejectedCars()
         {
             return _rejectedCarService.GetAllRejectedCars();
         }
 
-        public void RejectAppointment(int id, string rejectionReason)
-        {
-           _appontmentService.ChangeStatusTo(id,StatusEnum.Rejected);
-        }
+        //public void RejectAppointment(int id, string rejectionReason)
+        //{
+        //   _appontmentService.ChangeStatusTo(id,StatusEnum.Rejected);
+        //}
 
-        public string ScheduleAppointment(Appointment appointment)
+        public async Task<string> ScheduleAppointment(Appointment appointment)
         {
-            var car = _carService.GetVehicle(appointment.CarId);
+            var car = await _carService.GetVehicle(appointment.CarId);
             if (car == null) return "خودرو با مشخصات وارد شده یافت نشد.";
 
             var currentYear = int.Parse(DateTime.Now.ToPersianString().Split('/')[0]);
@@ -108,17 +108,15 @@ namespace App.Services.AppService
             if (car.Make != carMake)
                 return "خودرو شما مجاز به اخذ نوبت در این روز نیست";
 
-            var existingAppointments = _appontmentService
-            .GetAll()
-            .Where(x => x.Date.Date == appointment.Date.Date)
+            var existingAppointments = await _appontmentService.GetAll();
+			var NumberOfAppointmentsPerDay = existingAppointments.Where(x => x.Date.Date == appointment.Date.Date)
             .Count();
 
-            if (existingAppointments >= MaxRequest)
+            if (NumberOfAppointmentsPerDay >= MaxRequest)
                 return "ظرفیت در این روز تکمیل است.";
 
-            var lastInspection = _appontmentService
-           .GetAll()
-           .FirstOrDefault(x => x.CarId == car.Id && x.Date.Year == DateTime.Now.Year);
+            var AllAppointments = await _appontmentService.GetAll();
+			var lastInspection = AllAppointments.FirstOrDefault(x => x.CarId == car.Id && x.Date.Year == DateTime.Now.Year);
             if (lastInspection != null)
                 return "امکان معایته مجدد در یک سال وجود ندارد.";
 

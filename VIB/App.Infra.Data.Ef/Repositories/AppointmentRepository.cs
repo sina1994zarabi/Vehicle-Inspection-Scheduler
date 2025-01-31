@@ -20,51 +20,53 @@ namespace App.Infra.Data.Ef.Repositories
             _context = context;
         }
 
-        public void Add(Appointment appointment)
+        public async Task Add(Appointment appointment)
         {
             _context.Appointments.Add(appointment);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public string Delete(int id)
+        public async Task<string> Delete(int id)
         {
-            var appointmentToDelete = _context.Appointments.FirstOrDefault(x => x.Id == id);
+            var appointmentToDelete = await _context.Appointments.FirstOrDefaultAsync(x => x.Id == id);
             if (appointmentToDelete != null)
             {
                 _context.Appointments.Remove(appointmentToDelete);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 return "Successfully Deleted";
             }
             else return "Not Found";
         }
 
-        public List<Appointment> GetAll()
+        public async Task<List<Appointment>> GetAll()
         {
-            return _context.Appointments.
+            return await _context.Appointments.
                 Include(x => x.Car).
-                ToList();
+                ToListAsync();
         }
 
-        public Appointment GetById(int id)
+        public async Task<Appointment> GetById(int id)
         {
-            return _context.Appointments.
-                FirstOrDefault(x => x.Id == id);
+            return await _context.Appointments.
+                FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public void Update(int id, Appointment appointment)
+        public async Task Update(int id, Appointment appointment)
         {
-            var appontmentToEdit = GetById(id);
+            var appontmentToEdit = await GetById(id);
             appontmentToEdit.Date = appointment.Date;
             appontmentToEdit.CarId = appointment.CarId;
             appontmentToEdit.CenterId = appointment.CenterId;
+            appontmentToEdit.Status = appointment.Status;
+            await _context.SaveChangesAsync();
         }
 
-        public string ChangeStatusTo(int id,StatusEnum newEnum)
-        {
-            var appointment = GetById(id);
-            appointment.Status = newEnum;
-            _context.SaveChanges();
-            return "Status Changed Successfully";
-        }
+        //public string ChangeStatusTo(int id,StatusEnum newEnum)
+        //{
+        //    var appointment = GetById(id);
+        //    appointment.Status = newEnum;
+        //    _context.SaveChanges();
+        //    return "Status Changed Successfully";
+        //}
     }
 }

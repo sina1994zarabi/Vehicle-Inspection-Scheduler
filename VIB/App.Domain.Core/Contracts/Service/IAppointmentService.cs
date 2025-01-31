@@ -10,11 +10,11 @@ namespace App.Domain.Core.Contracts.Service
 {
     public interface IAppointmentService
     {
-        void CreateAppointment(Appointment appointment);
-        List<Appointment> GetAll();
-        Appointment GetById(int id);
-        void ChangeAppointmentInfo(int id,Appointment appointment);
-        string ChangeStatusTo(int id, StatusEnum status);
-        string Delete(int id);
+        Task CreateAppointment(Appointment appointment);
+        Task<List<Appointment>> GetAll();
+        Task<Appointment> GetById(int id);
+        Task ChangeAppointmentInfo(int id,Appointment appointment);
+        //string ChangeStatusTo(int id, StatusEnum status);
+        Task<string> Delete(int id);
     }
 }

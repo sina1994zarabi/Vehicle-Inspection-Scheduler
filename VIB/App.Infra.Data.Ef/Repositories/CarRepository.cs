@@ -20,44 +20,44 @@ namespace App.Infra.Data.Ef.Repositories
             _context = context;
         }
 
-        public void Add(Car car)
+        public async Task Add(Car car)
         {
             _context.Cars.Add(car);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public Result Delete(int id)
+        public async Task<Result> Delete(int id)
         {
-            var vehicleToDelete = _context.Cars.FirstOrDefault(x => x.Id == id);
+            var vehicleToDelete = await _context.Cars.FirstOrDefaultAsync(x => x.Id == id);
             if (vehicleToDelete != null)
             {
                 _context.Remove(vehicleToDelete);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 return new Result(true, "Vehicle Record Deleted Successfully");
             }
             return new Result(false, "Vehicle Not Found");
         }
 
-        public Car Get(int id)
+        public async Task<Car> Get(int id)
         {
-            return _context.Cars.FirstOrDefault(x => x.Id == id);
+            return await _context.Cars.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public List<Car> GetAll()
+        public async Task<List<Car>> GetAll()
         {
-            return _context.Cars.
-                ToList();
+            return await _context.Cars.
+                ToListAsync();
         }
 
-        public void Update(int id,Car car)
+        public async Task Update(int id,Car car)
         {
-            var vehicleToUpdate = _context.Cars.FirstOrDefault(x => x.Id == id);
+            var vehicleToUpdate = await _context.Cars.FirstOrDefaultAsync(x => x.Id == id);
             vehicleToUpdate.UserId = car.UserId;
             vehicleToUpdate.LicensePlate = car.LicensePlate;
             vehicleToUpdate.Year = car.Year;
             vehicleToUpdate.Make = car.Make;
             vehicleToUpdate.Model = car.Model;
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
 }

@@ -1,9 +1,11 @@
-﻿using App.Domain.Core.Entities.Vehicle;
+﻿using App.Domain.Core.Contracts.AppService;
+using App.Domain.Core.Entities.Vehicle;
 using App.Infra.Data.Ef;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Primitives;
+using System.Drawing;
 
 namespace App.EndPoints.WebApi.Controllers
 {
@@ -12,11 +14,14 @@ namespace App.EndPoints.WebApi.Controllers
 	public class CarController : ControllerBase
 	{
 		private readonly AppDbContext _appDbContext;
+		private readonly IVehicleAppService _vehicleAppService;
 		private const string API_KEY_HEADER = "X-API-KEY";
 
-		public CarController(AppDbContext appDbContext)
+		public CarController(AppDbContext appDbContext,
+							IVehicleAppService vehicleAppService)
 		{
 			_appDbContext = appDbContext;
+			_vehicleAppService = vehicleAppService;
 		}
 
 		private bool ValidateApiKey()
@@ -39,7 +44,8 @@ namespace App.EndPoints.WebApi.Controllers
 		public async Task<ActionResult<Car>> GetCar(int id) 
 		{
 			//if (!ValidateApiKey()) return Unauthorized();
-			var car = await _appDbContext.Cars.FindAsync(id);
+			//var car = await _appDbContext.Cars.FindAsync(id);
+			var car = await _vehicleAppService.GetCarDetails(id);
 			if (car == null) return NotFound("خودرو یافت نشد");
 			return car;
 		}
@@ -48,8 +54,9 @@ namespace App.EndPoints.WebApi.Controllers
 		public async Task<ActionResult<List<Car>>> GetCars()
 		{
 			//if(!ValidateApiKey()) return Unauthorized();
-			return await _appDbContext.Cars.
-				ToListAsync();
+			//return await _appDbContext.Cars.
+			//	ToListAsync();
+			return await _vehicleAppService.GetAllCars();
         }
 
 		[HttpPut("{id}")]
@@ -57,14 +64,17 @@ namespace App.EndPoints.WebApi.Controllers
 		{
 			if (!ValidateApiKey()) return Unauthorized("شما مجاز به انجام این کار نیستید.");
 			if (id != car.Id) return BadRequest();
-			var carToEdit = await _appDbContext.Cars.FindAsync(id);
-			if (carToEdit == null) return NotFound("خودرو یافت نشد");
-			carToEdit.LicensePlate = car.LicensePlate;
-			carToEdit.UserId = car.UserId;
-			carToEdit.Year = car.Year;
-			carToEdit.LastInspectionDate = car.LastInspectionDate;
-			carToEdit.Model = car.Model;
-			await _appDbContext.SaveChangesAsync();
+			#region DbContextAccess
+			//var carToEdit = await _appDbContext.Cars.FindAsync(id);
+			//if (carToEdit == null) return NotFound("خودرو یافت نشد");
+			//carToEdit.LicensePlate = car.LicensePlate;
+			//carToEdit.UserId = car.UserId;
+			//carToEdit.Year = car.Year;
+			//carToEdit.LastInspectionDate = car.LastInspectionDate;
+			//carToEdit.Model = car.Model;
+			//await _appDbContext.SaveChangesAsync();
+			#endregion
+			await _vehicleAppService.EditCarInfo(id, car);
 			return Ok("ویرایش مشخصات خودرو با موفقیت انجام شد.");
 		}
 
@@ -72,8 +82,9 @@ namespace App.EndPoints.WebApi.Controllers
 		public async Task<IActionResult> PostCar(Car car)
 		{
 			//if (!ValidateApiKey()) return Unauthorized();
-			_appDbContext.Cars.Add(car);
-			await _appDbContext.SaveChangesAsync();
+			//_appDbContext.Cars.Add(car);
+			//await _appDbContext.SaveChangesAsync();
+			await _vehicleAppService.AddNewCar(car);
 			return Ok("ثبت خودرو جدید با موفقیت انجام شد.");
 		}
 
@@ -81,11 +92,14 @@ namespace App.EndPoints.WebApi.Controllers
 		public async Task<IActionResult> DeleteCar(int id)
 		{
 			//if (!ValidateApiKey()) return Unauthorized();
-			var carToDelete = await _appDbContext.Cars.FindAsync(id);
-			if (carToDelete == null) return NotFound();
-			_appDbContext.Cars.Remove(carToDelete);
-			await _appDbContext.SaveChangesAsync();
-			return Ok("خودرو با موفقیت حذف شد");
+			#region DbContextAccess
+			//var carToDelete = await _appDbContext.Cars.FindAsync(id);
+			//if (carToDelete == null) return NotFound();
+			//_appDbContext.Cars.Remove(carToDelete);
+			//await _appDbContext.SaveChangesAsync();
+			#endregion
+			var result = await _vehicleAppService.DeleteCarRecordInfo(id);
+			return Ok(result.Message);
 		}
 
 	}

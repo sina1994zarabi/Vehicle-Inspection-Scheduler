@@ -10,10 +10,10 @@ namespace App.Domain.Core.Contracts.Service
 {
     public interface ICarService
     {
-        void Register(Car car);
-        Car GetVehicle(int id);
-        List<Car> GetAllVehicles();
-        void ChangeVehicleInfo(int id,Car car);
-        Result DeleteVehicleRecord(int id);
+        Task Register(Car car);
+        Task<Car> GetVehicle(int id);
+        Task<List<Car>> GetAllVehicles();
+        Task ChangeVehicleInfo(int id,Car car);
+        Task<Result> DeleteVehicleRecord(int id);
     }
 }

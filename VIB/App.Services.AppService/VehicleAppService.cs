@@ -1,5 +1,6 @@
 ﻿using App.Domain.Core.Contracts.AppService;
 using App.Domain.Core.Contracts.Service;
+using App.Domain.Core.Entities.Base.Entity;
 using App.Domain.Core.Entities.Vehicle;
 using System;
 using System.Collections.Generic;
@@ -19,52 +20,57 @@ namespace App.Services.AppService
             _rejectedCarService = rejectedCarService;
         }
 
-        public void AddNewCar(Car car)
+        public async Task AddNewCar(Car car)
         {
-            _carService.Register(car);
+            await _carService.Register(car);
         }
 
-        public void DeleteCarRecordInfo(int carId)
+        public async Task<Result> DeleteCarRecordInfo(int carId)
         {
-           _carService.DeleteVehicleRecord(carId);
+           return await _carService.DeleteVehicleRecord(carId);
         }
 
-        public void EditCarInfo(Car car)
+        public async Task EditCarInfo(int id,Car car)
         {
-            _carService.ChangeVehicleInfo(car.Id,car);
+            await _carService.ChangeVehicleInfo(id,car);
         }
 
-        public Car GetCarDetails(int carId)
+		public async Task<List<Car>> GetAllCars()
+		{
+			return await _carService.GetAllVehicles();
+		}
+
+		public async Task<Car> GetCarDetails(int carId)
         {
-            return _carService.GetVehicle(carId);
+            return await _carService.GetVehicle(carId);
         }
 
-        public List<Car> ListOwnerCars(int userId)
-        {
-            return _carService.GetAllVehicles().
-                    Where(x => x.UserId == userId).ToList();
-        }
+        //public List<Car> ListOwnerCars(int userId)
+        //{
+        //    return _carService.GetAllVehicles().
+        //            Where(x => x.UserId == userId).ToList();
+        //}
 
         public void LogRejectedCar(RejectedCar car)
         {
             _rejectedCarService.AddRejectedCar(car);
         }
 
-        public string ValidatePlateNumber(string plateNumber)
-        {
-            try
-            {
-                var car = _carService.GetAllVehicles().
-                        Where(x => x.LicensePlate == plateNumber).
-                        Single();
-                if (car != null)
-                    return "شماره پلاک معتبر است";
-                return string.Empty;
-            } catch (Exception ex)
-            {
-                return string.Empty;
-            }
-        }
+        //public string ValidatePlateNumber(string plateNumber)
+        //{
+        //    try
+        //    {
+        //        var car = _carService.GetAllVehicles().
+        //                Where(x => x.LicensePlate == plateNumber).
+        //                Single();
+        //        if (car != null)
+        //            return "شماره پلاک معتبر است";
+        //        return string.Empty;
+        //    } catch (Exception ex)
+        //    {
+        //        return string.Empty;
+        //    }
+        //}
 
 
     }

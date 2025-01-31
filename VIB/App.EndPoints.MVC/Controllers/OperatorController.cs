@@ -66,33 +66,33 @@ namespace App.EndPoints.MVC.Controllers
             return View(model);
         }
 
-        public IActionResult ViewPendingAppointments()
-        {
-            var appointments = _appointmentAppService.GetAllAppointments().
-                Where(x => x.Status == StatusEnum.Pending).
-                ToList();
-            return View(appointments);
-        }
+        //public IActionResult ViewPendingAppointments()
+        //{
+        //    var appointments = _appointmentAppService.GetAllAppointments().
+        //        Where(x => x.Status == StatusEnum.Pending).
+        //        ToList();
+        //    return View(appointments);
+        //}
 
-        [HttpPost]
-        public IActionResult ConfirmRequest(int id)
-        {
-            _appointmentAppService.ConfirmAppointment(id);
-            return RedirectToAction("ViewPendingAppointments");
-        }
+        //[HttpPost]
+        //public IActionResult ConfirmRequest(int id)
+        //{
+        //    _appointmentAppService.ConfirmAppointment(id);
+        //    return RedirectToAction("ViewPendingAppointments");
+        //}
 
-        [HttpPost]
-        public IActionResult RejectRequest(int id)
-        {
-            _appointmentAppService.RejectAppointment(id,"");
-            var rejectedAppointment = _appointmentAppService.GetAppointmentById(id);
-            var car = rejectedAppointment.Car;
-            var rejectedCar = new RejectedCar() {
-                CarId = car.Id,
-                RejectionDate = DateTime.Now,
-            };
-            _vehicleAppService.LogRejectedCar(rejectedCar);
-            return RedirectToAction("ViewPendingAppointments");
-        }
+        //[HttpPost]
+        //public IActionResult RejectRequest(int id)
+        //{
+        //    _appointmentAppService.RejectAppointment(id,"");
+        //    var rejectedAppointment = _appointmentAppService.GetAppointmentById(id);
+        //    var car = rejectedAppointment.Car;
+        //    var rejectedCar = new RejectedCar() {
+        //        CarId = car.Id,
+        //        RejectionDate = DateTime.Now,
+        //    };
+        //    _vehicleAppService.LogRejectedCar(rejectedCar);
+        //    return RedirectToAction("ViewPendingAppointments");
+        //}
     }
 }

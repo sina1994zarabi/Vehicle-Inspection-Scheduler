@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Primitives;
+using System.Drawing;
 
 namespace App.EndPoints.WebApi.Controllers
 {
@@ -26,7 +27,8 @@ namespace App.EndPoints.WebApi.Controllers
 		[HttpGet("{id}")]
 		public async Task<ActionResult<Appointment>> Get(int id)
 		{
-			var appoinntment = await _appDbContext.Appointments.FindAsync(id);
+			// var appoinntment = await _appDbContext.Appointments.FindAsync(id);
+			var appoinntment = await _appointmentAppService.GetAppointmentById(id);
 			if (appoinntment == null) return NotFound("نوبت معاینه فنی یافت نشد");
 			return appoinntment;
 		}
@@ -34,29 +36,35 @@ namespace App.EndPoints.WebApi.Controllers
 		[HttpGet]
 		public async Task<ActionResult<List<Appointment>>> GetAll()
 		{
-			return await _appDbContext.Appointments.ToListAsync();
+			//return await _appDbContext.Appointments.ToListAsync();
+			return await _appointmentAppService.GetAllAppointments();
 		}
 
 		[HttpPut("{id}")]
 		public async Task<IActionResult> Update(int id,Appointment appointment)
 		{  
-			if (id != appointment.Id) return BadRequest(); 
-			var appointmentToEdit = await _appDbContext.Appointments.FindAsync(id);
-			if (appointmentToEdit == null) return NotFound("نوبت معاینه فنی یافت نشد");
-			appointmentToEdit.CarId = appointment.CarId;
-			appointmentToEdit.CenterId = appointment.CenterId;
-			appointmentToEdit.Status = appointment.Status;
-			appointmentToEdit.Date = appointment.Date;
-			await _appDbContext.SaveChangesAsync();
+			if (id != appointment.Id) return BadRequest();
+			#region dbContextAccess
+			//var appointmentToEdit = await _appDbContext.Appointments.FindAsync(id);
+			//if (appointmentToEdit == null) return NotFound("نوبت معاینه فنی یافت نشد");
+			//appointmentToEdit.CarId = appointment.CarId;
+			//appointmentToEdit.CenterId = appointment.CenterId;
+			//appointmentToEdit.Status = appointment.Status;
+			//appointmentToEdit.Date = appointment.Date;
+			//await _appDbContext.SaveChangesAsync();
+			#endregion
+			await _appointmentAppService.ChangeAppointmentInfo(appointment);
 			return Ok("تغییرات با موفقیت اعمال شد");
 		}
 
 		[HttpPost]
 		public async Task<IActionResult> Create(Appointment appointment)
 		{
-			if (!ModelState.IsValid) return BadRequest(ModelState);
+			//if (!ModelState.IsValid) return BadRequest(ModelState);
+			#region DbContextAccess
 			//_appDbContext.Appointments.Add(appointment);
 			//await _appDbContext.SaveChangesAsync();
+			#endregion
 			var result = _appointmentAppService.ScheduleAppointment(appointment);
 			return Ok(result);
 		}
@@ -64,11 +72,14 @@ namespace App.EndPoints.WebApi.Controllers
 		[HttpDelete("{id}")]
 		public async Task<IActionResult> Delete(int id)
 		{
+			#region DbContextAccess
 			var appointmentToDelete = await _appDbContext.Appointments.FindAsync(id);
 			if (appointmentToDelete == null)  return NotFound("نوبت معاینه فنی یافت نشد");
 			_appDbContext.Appointments.Remove(appointmentToDelete);
 			await _appDbContext.SaveChangesAsync();
-			return NoContent();
+			#endregion
+			var result = await _appointmentAppService.DeleteAppointment(id);
+			return Ok(result);
 		}
 	}
 }

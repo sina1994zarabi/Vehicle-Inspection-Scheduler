@@ -10,10 +10,10 @@ namespace App.Domain.Core.Contracts.Repository
 {
     public interface ICarRepository
     {
-        void Add(Car car);
-        Car Get(int id);
-        List<Car> GetAll();
-        void Update(int id,Car car);
-        Result Delete(int id);
+        Task Add(Car car);
+        Task<Car> Get(int id);
+        Task<List<Car>> GetAll();
+        Task Update(int id,Car car);
+        Task<Result> Delete(int id);
     }
 }

@@ -19,29 +19,29 @@ namespace App.Domain.Service
             _carRepository = carRepository;
         }
 
-        public void ChangeVehicleInfo(int id,Car car)
+        public async Task ChangeVehicleInfo(int id,Car car)
         {
-             _carRepository.Update(id,car);
+             await _carRepository.Update(id,car);
         }
 
-        public Result DeleteVehicleRecord(int id)
+        public async Task<Result> DeleteVehicleRecord(int id)
         {
-            return _carRepository.Delete(id);
+            return await _carRepository.Delete(id);
         }
 
-        public List<Car> GetAllVehicles()
+        public async Task<List<Car>> GetAllVehicles()
         {
-            return _carRepository.GetAll();
+            return await _carRepository.GetAll();
         }
 
-        public Car GetVehicle(int id)
+        public async Task<Car> GetVehicle(int id)
         {
-            return _carRepository.Get(id);
+            return await _carRepository.Get(id);
         }
 
-        public void Register(Car car)
+        public async Task Register(Car car)
         {
-             _carRepository.Add(car);
+             await _carRepository.Add(car);
         }
     }
 }
